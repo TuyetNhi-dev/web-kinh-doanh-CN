@@ -1,8 +1,8 @@
 import './globals.css';
 
 export const metadata = {
-  title: 'TechStore | Công nghệ đỉnh cao',
-  description: 'Trạm mua sắm thiết bị công nghệ hàng đầu, hiện đại, nhanh chóng. Giao hàng 2 tiếng tận nơi.',
+  title: 'TechStore | Mua Sắm Dễ Dàng, Gắn Kết Tương Lai',
+  description: 'Cửa hàng thiết bị công nghệ hàng đầu, chuyên cung cấp Laptop, PC, Phụ kiện chính hãng.',
 };
 
 export default function RootLayout({ children }) {
@@ -12,25 +12,71 @@ export default function RootLayout({ children }) {
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
       </head>
       <body>
-        {/* Navigation Bar */}
-        <nav className="navbar glass">
-          <div className="container nav-container">
-            <a href="/" className="logo">
-              TECH<span>STORE</span>
-            </a>
-            
-            <div className="nav-links">
-              <a href="/" className="active">Trang Chủ</a>
-              <a href="/products">Sản Phẩm</a>
-              <a href="/promotions">Khuyến Mãi</a>
-            </div>
-
-            <div className="nav-actions">
-              <a href="/cart" className="menu-icon"><i className="fa-solid fa-cart-shopping"></i></a>
-              <a href="/login" className="btn btn-outline">Đăng Nhập</a>
+          {/* Top Bar (Not sticky) */}
+          <div className="header-top">
+            <div className="container" style={{justifyContent: 'flex-start'}}>
+              <a href="#">Hệ thống Showroom</a>
+              <a href="#">Hotline: 1800-TECH</a>
+              <a href="#">Tin tức</a>
             </div>
           </div>
-        </nav>
+
+        <header style={{ position: 'sticky', top: 0, zIndex: 1000 }}>
+          {/* Main Bar */}
+          <div className="header-main">
+            <div className="container">
+              {/* Logo */}
+              <a href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+                <img src="/logo.png" alt="HBN Tech Store" style={{ height: '50px', objectFit: 'contain', filter: 'brightness(0.2) contrast(1.5)' }} />
+              </a>
+
+              {/* Search Bar */}
+              <div className="search-bar">
+                <input type="text" placeholder="Tìm kiếm laptop, linh kiện PC, gaming gear..." />
+                <i className="fa-solid fa-magnifying-glass"></i>
+              </div>
+
+              {/* User Actions */}
+              <div className="header-actions">
+                <a href="/login" className="action-item">
+                  <i className="fa-regular fa-user"></i>
+                  <div style={{ lineHeight: '1.2' }}>
+                    <span style={{display: 'block', fontSize: '0.85rem', fontWeight: 'bold'}}>Đăng nhập</span>
+                    <span style={{fontSize: '0.75rem', color: '#888'}}>Đăng ký</span>
+                  </div>
+                </a>
+                <a href="#" className="action-item" style={{ position: 'relative' }}>
+                  <i className="fa-regular fa-bell"></i>
+                  <span style={{position: 'absolute', top: '-4px', right: '-4px', background: 'var(--pv-red, #da251d)', color: '#fff', fontSize: '9px', width: '15px', height: '15px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold'}}>3</span>
+                </a>
+                <a href="/cart" className="action-item">
+                  <i className="fa-solid fa-cart-shopping"></i>
+                  <div style={{ lineHeight: '1.2' }}>
+                    <span style={{display: 'block', fontSize: '0.85rem', fontWeight: 'bold'}}>Giỏ hàng</span>
+                    <span style={{fontSize: '0.75rem', color: '#888'}}>0 sản phẩm</span>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Bar: Categories */}
+          <div className="header-bottom">
+            <div className="container">
+              <div className="category-btn">
+                <i className="fa-solid fa-bars"></i>
+                <span>Danh mục sản phẩm</span>
+              </div>
+              <nav className="nav-links">
+                <a href="#">Bán chạy nhất</a>
+                <a href="#">Hàng mới về</a>
+                <a href="#">Khuyến mãi</a>
+                <a href="#">Xây dựng cấu hình</a>
+                <a href="#">Hỗ trợ</a>
+              </nav>
+            </div>
+          </div>
+        </header>
 
         {/* Dynamic Pages */}
         <main>
@@ -42,8 +88,10 @@ export default function RootLayout({ children }) {
           <div className="container">
             <div className="footer-container">
               <div>
-                <a href="/" className="logo" style={{fontSize: '1.5rem'}}>TECH<span>STORE</span></a>
-                <p style={{marginTop: '15px'}}>Nâng tầm trải nghiệm số của bạn với các thiết bị cao cấp.</p>
+                <a href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+                   <img src="/logo.png" alt="HBN Tech Store" style={{ height: '40px', objectFit: 'contain', filter: 'brightness(0.3) contrast(1.2)' }} />
+                </a>
+                <p style={{marginTop: '15px', color: '#ccc'}}>Nâng tầm trải nghiệm số của bạn với các thiết bị cao cấp.</p>
               </div>
               <div>
                 <h3>Danh mục</h3>
@@ -63,7 +111,7 @@ export default function RootLayout({ children }) {
               </div>
             </div>
             <div className="footer-bottom">
-              <p>&copy; 2026 TechStore. Developed by Antigravity.</p>
+              <p>&copy; 2026 HBN TechStore. Developed by Antigravity.</p>
             </div>
           </div>
         </footer>
