@@ -162,6 +162,7 @@ header {
   flex: 1;
   max-width: 600px;
   position: relative;
+  margin-left: 40px;
 }
 
 .search-bar input {
@@ -240,7 +241,8 @@ header {
 }
 
 .nav-links a:hover {
-  color: #888;
+  color: #da251d;
+  transition: color 0.3s ease;
 }
 
 /* Hero Banner */
@@ -276,8 +278,9 @@ header {
 }
 
 .hero-subtitle {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   margin-bottom: 30px;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
 
 /* Bento Promo Grid */
@@ -401,16 +404,17 @@ header {
 .footer {
   margin-top: auto;
   padding: 60px 0 20px;
-  background-color: #111;
-  color: #fff;
+  background-color: #eaecf0;
+  border-top: 1px solid #d1d5db;
+  color: #333;
 }
 
 .footer a {
-  color: #ccc;
+  color: #555;
 }
 
 .footer a:hover {
-  color: #fff;
+  color: #000;
 }
 
 .footer-container {
@@ -422,7 +426,7 @@ header {
 
 .footer h3 {
   margin-bottom: 20px;
-  color: #fff;
+  color: #111;
 }
 
 .footer ul {
@@ -436,8 +440,8 @@ header {
 .footer-bottom {
   text-align: center;
   padding-top: 20px;
-  border-top: 1px solid rgba(255,255,255,0.1);
-  color: rgba(255,255,255,0.5);
+  border-top: 1px solid #c0c4cc;
+  color: #777;
   font-size: 0.9rem;
 }
 
@@ -598,8 +602,8 @@ header {
 /* PV Style Product Grid */
 .pv-product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 15px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 24px;
 }
 
 .pv-product-card {
@@ -658,7 +662,7 @@ header {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  height: 40px; /* Force consistent height for 2 lines */
+  min-height: 45px;
 }
 
 .pv-product-specs {
@@ -684,11 +688,37 @@ header {
   text-overflow: ellipsis;
 }
 
+.pv-price-cart-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: auto;
+}
+
 .pv-product-pricing {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  margin-top: auto;
+}
+
+.add-cart-btn {
+  background: #da251d;
+  color: white;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.add-cart-btn:hover {
+  transform: scale(1.1);
+  background: #b51c15;
 }
 
 .pv-price {

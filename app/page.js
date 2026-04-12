@@ -76,7 +76,7 @@ export default function Home() {
           <div className="hero-content">
             <h1 className="hero-title">Xây Dựng Cấu Hình Mơ Ước</h1>
             <p className="hero-subtitle">Bộ máy PC tự lắp ráp chỉ từ 10.990.000đ</p>
-            <button className="btn btn-primary" style={{ padding: '15px 40px', fontSize: '1.1rem', backgroundColor: '#fff', color: '#000', fontWeight: 'bold', borderRadius: '8px' }}>
+            <button className="btn btn-primary" style={{ padding: '15px 40px', fontSize: '1.1rem', backgroundColor: '#0052cc', color: '#fff', fontWeight: 'bold', borderRadius: '8px' }}>
               Mua Sắm Ngay
             </button>
           </div>
@@ -130,50 +130,8 @@ export default function Home() {
       {/* Main Catalog View (Phong Vu Style) */}
       <section className="container catalog-container">
         
-        {/* Left Sidebar Filters */}
-        <aside className="catalog-sidebar">
-          
-          <div className="sidebar-widget">
-            <h4 className="sidebar-widget-title">Khoảng giá</h4>
-            <div className="price-inputs">
-              <input type="text" placeholder="Thấp nhất" />
-              <span>-</span>
-              <input type="text" placeholder="Cao nhất" />
-            </div>
-            <ul className="filter-list">
-              <li><label><input type="checkbox"/> Dưới 10 triệu</label></li>
-              <li><label><input type="checkbox"/> Từ 10 - 20 triệu</label></li>
-              <li><label><input type="checkbox"/> Từ 20 - 30 triệu</label></li>
-              <li><label><input type="checkbox"/> Trên 30 triệu</label></li>
-            </ul>
-          </div>
-
-          <div className="sidebar-widget">
-            <h4 className="sidebar-widget-title">Thương hiệu</h4>
-            <ul className="filter-list">
-              <li><label><input type="checkbox"/> ASUS</label></li>
-              <li><label><input type="checkbox"/> LENOVO</label></li>
-              <li><label><input type="checkbox"/> LOGITECH</label></li>
-              <li><label><input type="checkbox"/> MSI</label></li>
-              <li><label><input type="checkbox"/> RAZER</label></li>
-              <li><label><input type="checkbox"/> Apple</label></li>
-            </ul>
-          </div>
-
-          <div className="sidebar-widget">
-            <h4 className="sidebar-widget-title">Nhu cầu sử dụng</h4>
-            <ul className="filter-list">
-              <li><label><input type="checkbox"/> Gaming / E-Sport</label></li>
-              <li><label><input type="checkbox"/> Thiết kế đồ hoạ</label></li>
-              <li><label><input type="checkbox"/> Học tập / Văn phòng</label></li>
-              <li><label><input type="checkbox"/> Lập trình / Coder</label></li>
-            </ul>
-          </div>
-
-        </aside>
-
-        {/* Right Main Content */}
-        <div className="catalog-main">
+        {/* Main Content */}
+        <div className="catalog-main" style={{ width: '100%' }}>
           
           <div className="catalog-header">
             <h2 className="catalog-title">Sản Phẩm Công Nghệ - TechStore Đỉnh Cao</h2>
@@ -213,12 +171,17 @@ export default function Home() {
                   </ul>
                 </div>
                 
-                <div className="pv-product-pricing">
-                  <span className="pv-price">{product.price} ₫</span>
-                  <div className="pv-old-price-container">
-                    <span className="pv-old-price">{product.oldPrice} ₫</span>
-                    <span className="pv-discount-rate">{product.discount}</span>
+                <div className="pv-price-cart-row">
+                  <div className="pv-product-pricing">
+                    <span className="pv-price">{product.price} ₫</span>
+                    <div className="pv-old-price-container">
+                      <span className="pv-old-price">{product.oldPrice} ₫</span>
+                      <span className="pv-discount-rate">{product.discount}</span>
+                    </div>
                   </div>
+                  <button className="add-cart-btn" title="Thêm vào giỏ hàng">
+                    <i className="fa-solid fa-cart-shopping"></i>
+                  </button>
                 </div>
               </div>
             ))}
@@ -227,21 +190,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Newsletter Section */}
-      <section className="container" style={{ margin: '60px auto', padding: '40px', textAlign: 'center' }}>
-        <div style={{ background: '#f0f0f0', padding: '50px 20px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
-          <h2 style={{ fontSize: '2rem', marginBottom: '10px' }}>Đăng ký nhận thông báo</h2>
-          <p style={{ color: 'var(--text-secondary)', margin: '15px 0 30px' }}>Nhận ưu đãi giảm ngay 10% cho đơn hàng đầu tiên của bạn.</p>
-          <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', maxWidth: '500px', margin: '0 auto' }}>
-             <input 
-                type="email" 
-                placeholder="Email của bạn..." 
-                style={{ flex: 1, padding: '12px 20px', borderRadius: '8px', border: '1px solid #ccc', outline: 'none' }}
-             />
-             <button className="btn btn-primary" style={{backgroundColor: '#111', color: '#fff'}}>Đăng Ký</button>
-          </div>
-        </div>
-      </section>
+
     </>
   );
 }

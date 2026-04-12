@@ -88,10 +88,10 @@ export default function RootLayout({ children }) {
           <div className="container">
             <div className="footer-container">
               <div>
-                <a href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-                   <img src="/logo.png" alt="HBN Tech Store" style={{ height: '40px', objectFit: 'contain', filter: 'brightness(0.3) contrast(1.2)' }} />
+                  <a href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+                   <img src="/logo.png" alt="HBN Tech Store" style={{ height: '40px', objectFit: 'contain', filter: 'brightness(0.2) contrast(1.5)' }} />
                 </a>
-                <p style={{marginTop: '15px', color: '#ccc'}}>Nâng tầm trải nghiệm số của bạn với các thiết bị cao cấp.</p>
+                <p style={{marginTop: '15px', color: '#555'}}>Nâng tầm trải nghiệm số của bạn với các thiết bị cao cấp.</p>
               </div>
               <div>
                 <h3>Danh mục</h3>
@@ -99,6 +99,15 @@ export default function RootLayout({ children }) {
                   <li><a href="#">MacBook & Laptop</a></li>
                   <li><a href="#">Smartphone</a></li>
                   <li><a href="#">Phụ Kiện Thông Minh</a></li>
+                </ul>
+              </div>
+              <div>
+                <h3>Chính sách</h3>
+                <ul>
+                  <li><a href="#">Bảo mật thông tin</a></li>
+                  <li><a href="#">Chính sách Đổi trả</a></li>
+                  <li><a href="#">Chính sách Giao hàng</a></li>
+                  <li><a href="#">Chính sách Bảo hành</a></li>
                 </ul>
               </div>
               <div>
