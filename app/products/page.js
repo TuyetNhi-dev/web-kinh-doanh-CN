@@ -1,12 +1,31 @@
+"use client";
+
+import { useEffect, useState } from 'react';
+import { useCartStore } from '../../lib/useCartStore';
+
 export default function ProductsPage() {
-  const products = [
-    { id: 1, name: 'MacBook Pro 16" M3 Max', price: '89.990.000đ', category: 'Laptop', icon: 'fa-apple' },
-    { id: 2, name: 'iPhone 15 Pro Max 256GB', price: '29.500.000đ', category: 'Smartphone', icon: 'fa-mobile-screen-button' },
-    { id: 3, name: 'Tai nghe Sony WH-1000XM5', price: '7.990.000đ', category: 'Phụ Kiện', icon: 'fa-headphones' },
-    { id: 4, name: 'Apple Watch Ultra 2', price: '21.000.000đ', category: 'Smartwatch', icon: 'fa-clock' },
-    { id: 5, name: 'Asus ROG Strix G16', price: '38.490.000đ', category: 'Laptop', icon: 'fa-laptop' },
-    { id: 6, name: 'Samsung Galaxy S24 Ultra', price: '31.990.000đ', category: 'Smartphone', icon: 'fa-mobile' }
-  ];
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const addToCart = useCartStore((state) => state.addToCart);
+
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const res = await fetch('/api/products');
+        const data = await res.json();
+        setProducts(data);
+      } catch (error) {
+        console.error('Lỗi fetch sản phẩm:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchProducts();
+  }, []);
+
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+  };
 
   return (
     <div className="container" style={{ padding: '60px 20px', minHeight: '80vh' }}>
@@ -34,22 +53,41 @@ export default function ProductsPage() {
         </aside>
 
         {/* Lưới Sản Phẩm */}
-        <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '30px' }}>
-          {products.map(product => (
-            <div key={product.id} className="product-card glass">
-              <a href={`/products/${product.id}`}>
-                <div className="product-icon">
-                  <i className={`fa-brands ${product.icon} ${!product.icon.includes('brands') ? 'fa-solid' : ''}`}></i>
-                </div>
-                <h3 className="product-name" style={{ color: 'var(--text-primary)' }}>{product.name}</h3>
-                <p className="product-price">{product.price}</p>
-              </a>
-              <button className="btn btn-outline" style={{width: '100%', marginTop: '15px'}}>
-                <i className="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
-              </button>
+        {loading ? (
+            <div style={{ flex: 1, textAlign: 'center', padding: '100px' }}>
+                <p>Đang tải sản phẩm...</p>
             </div>
-          ))}
-        </div>
+        ) : !Array.isArray(products) ? (
+            <div style={{ flex: 1, textAlign: 'center', padding: '100px', color: 'var(--pv-red, #ff4d4d)' }}>
+                <p>Không thể tải danh sách sản phẩm. Vui lòng thử lại sau.</p>
+                <p style={{ fontSize: '0.8rem', marginTop: '10px' }}>Lỗi: {products?.message || 'Không xác định'}</p>
+            </div>
+        ) : (
+            <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '30px' }}>
+            {products.map(product => (
+                <div key={product.id} className="product-card glass">
+                <a href={`/products/${product.id}`}>
+                    <div className="product-icon">
+                    <i className="fa-solid fa-laptop"></i> 
+                    {/* Placeholder icon since we don't have icons in DB yet */}
+                    </div>
+                    <h3 className="product-name" style={{ color: 'var(--text-primary)' }}>{product.name}</h3>
+                    <p className="product-price">{formatPrice(product.price)}</p>
+                </a>
+                <button 
+                    className="btn btn-primary" 
+                    style={{width: '100%', marginTop: '15px'}}
+                    onClick={() => {
+                        addToCart(product);
+                        alert(`Đã thêm ${product.name} vào giỏ hàng!`);
+                    }}
+                >
+                    <i className="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
+                </button>
+                </div>
+            ))}
+            </div>
+        )}
       </div>
     </div>
   );
