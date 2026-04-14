@@ -6,6 +6,7 @@ import * as z from "zod";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 // Define Validation Schema with Zod
 const loginSchema = z.object({
@@ -54,7 +55,7 @@ export default function LoginPage() {
       <div className="glass" style={{ width: '100%', maxWidth: '450px', padding: '40px', textAlign: 'center' }}>
         
         <h2 style={{ fontSize: '2rem', marginBottom: '10px' }}>Chào Mừng Trở Lại</h2>
-        <p style={{ color: 'var(--text-secondary)', marginBottom: '30px' }}>Đăng nhập để vào TechStore</p>
+        <p style={{ color: 'var(--text-secondary)', marginBottom: '30px' }}>Đăng nhập để vào HBN TechStore</p>
 
         {error && <p style={{ color: 'var(--pv-red, #ff4d4d)', marginBottom: '15px' }}>{error}</p>}
 
@@ -123,7 +124,7 @@ export default function LoginPage() {
         </button>
 
         <p style={{ marginTop: '25px', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
-          Chưa có tài khoản? <a href="#" style={{ color: 'var(--accent-color)' }}>Đăng ký ngay</a>
+          Chưa có tài khoản? <Link href="/register" style={{ color: 'var(--accent-color)' }}>Đăng ký ngay</Link>
         </p>
 
       </div>

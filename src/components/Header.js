@@ -2,14 +2,22 @@
 
 import { useSession, signOut } from "next-auth/react";
 import { useCartStore } from "@/store/useCartStore";
+import { useNotificationStore } from "@/store/useNotificationStore";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import NotificationDropdown from "./NotificationDropdown";
+import { motion } from "framer-motion";
 
 export default function Header() {
   const { data: session } = useSession();
   const cart = useCartStore((state) => state.cart);
   const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+  
+  const notifications = useNotificationStore((state) => state.notifications);
+  const unreadCount = notifications.filter(n => !n.isRead).length;
+
   const [mounted, setMounted] = useState(false);
+  const [isNotifyOpen, setIsNotifyOpen] = useState(false);
 
   // Tránh lỗi hydration với Zustand persist
   useEffect(() => {
@@ -17,9 +25,9 @@ export default function Header() {
   }, []);
 
   return (
-    <header style={{ position: 'sticky', top: 0, zIndex: 1000 }}>
+    <header>
       {/* Main Bar */}
-      <div className="header-main">
+      <div className="header-main" style={{ position: 'sticky', top: 0, zIndex: 1001 }}>
         <div className="container">
           {/* Logo */}
           <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
@@ -35,7 +43,15 @@ export default function Header() {
           {/* User Actions */}
           <div className="header-actions">
             {session ? (
-              <div className="action-item" style={{ cursor: 'pointer' }} onClick={() => signOut()}>
+              <div 
+                className="action-item" 
+                style={{ cursor: 'pointer' }} 
+                onClick={() => {
+                  if (window.confirm("Bạn có muốn đăng xuất khỏi HBN TechStore không?")) {
+                    signOut();
+                  }
+                }}
+              >
                 <i className="fa-regular fa-user"></i>
                 <div style={{ lineHeight: '1.2' }}>
                   <span style={{display: 'block', fontSize: '0.85rem', fontWeight: 'bold'}}>{session.user.name}</span>
@@ -52,10 +68,28 @@ export default function Header() {
               </Link>
             )}
 
-            <Link href="#" className="action-item" style={{ position: 'relative' }}>
-              <i className="fa-regular fa-bell"></i>
-              <span style={{position: 'absolute', top: '-4px', right: '-4px', background: 'var(--pv-red, #da251d)', color: '#fff', fontSize: '9px', width: '15px', height: '15px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold'}}>3</span>
-            </Link>
+            <div style={{ position: 'relative' }}>
+              <motion.div 
+                className="action-item" 
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setIsNotifyOpen(!isNotifyOpen)}
+              >
+                <motion.i 
+                  className="fa-regular fa-bell"
+                  animate={!isNotifyOpen && unreadCount > 0 ? { rotate: [0, -10, 10, -10, 10, 0] } : {}}
+                  transition={{ repeat: Infinity, duration: 2, repeatDelay: 3 }}
+                ></motion.i>
+                {mounted && unreadCount > 0 && (
+                  <span style={{position: 'absolute', top: '-4px', right: '-4px', background: 'var(--pv-red, #da251d)', color: '#fff', fontSize: '9px', width: '15px', height: '15px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold'}}>{unreadCount}</span>
+                )}
+              </motion.div>
+              
+              <NotificationDropdown 
+                isOpen={isNotifyOpen} 
+                onClose={() => setIsNotifyOpen(false)} 
+              />
+            </div>
 
             <Link href="/cart" className="action-item">
               <i className="fa-solid fa-cart-shopping"></i>

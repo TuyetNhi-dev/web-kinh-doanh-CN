@@ -2,8 +2,8 @@ import { Providers } from '../components/Providers';
 import './globals.css';
 
 export const metadata = {
-  title: 'TechStore | Mua Sắm Dễ Dàng, Gắn Kết Tương Lai',
-  description: 'Cửa hàng thiết bị công nghệ hàng đầu, chuyên cung cấp Laptop, PC, Phụ kiện chính hãng.',
+    title: 'HBN TechStore | Mua Sắm Dễ Dàng, Gắn Kết Tương Lai',
+    description: 'Cửa hàng thiết bị công nghệ hàng đầu, chuyên cung cấp Laptop, PC, Phụ kiện chính hãng.',
 };
 
 export default function RootLayout({ children }) {

@@ -2,7 +2,7 @@ import { Providers } from '../../components/Providers';
 import Header from '../../components/Header';
 
 export const metadata = {
-  title: 'TechStore | Mua Sắm Dễ Dàng, Gắn Kết Tương Lai',
+  title: 'HBN TechStore | Mua Sắm Dễ Dàng, Gắn Kết Tương Lai',
   description: 'Cửa hàng thiết bị công nghệ hàng đầu, chuyên cung cấp Laptop, PC, Phụ kiện chính hãng.',
 };
 
@@ -59,7 +59,7 @@ export default function ShopLayout({ children }) {
             </div>
           </div>
           <div className="footer-bottom">
-            <p>&copy; 2026 HBN TechStore. Developed by Antigravity.</p>
+            <p>&copy; 2026 HBN TechStore. Developed by Tuyet Nhi.</p>
           </div>
         </div>
       </footer>

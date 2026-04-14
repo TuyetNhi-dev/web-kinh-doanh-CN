@@ -58,7 +58,7 @@ export default function ProductCard({ product }) {
         </h3>
         
         <p className="product-card-description">
-          {product.description || "Sản phẩm công nghệ chính hãng, bảo hành 12 tháng tại TechStore."}
+          {product.description || "Sản phẩm chất lượng cao từ HBN TechStore."}
         </p>
 
         <div className="product-card-footer">
