@@ -27,6 +27,7 @@ export async function POST(req) {
     );
     const orderId = orderResult.insertId;
 
+<<<<<<< HEAD
     // 2. Lưu vào bảng order_items và trừ tồn kho
     for (const item of items) {
       const [productRows] = await connection.execute(
@@ -43,15 +44,22 @@ export async function POST(req) {
         throw new Error(`Sản phẩm ${item.name || item.id} không đủ tồn kho`);
       }
 
+=======
+    // 2. Lưu vào bảng order_items
+    for (const item of items) {
+>>>>>>> 82603becc7364de2c67f9704b28566c7fc19b267
       await connection.execute(
         "INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)",
         [orderId, item.id, item.quantity, item.price]
       );
+<<<<<<< HEAD
 
       await connection.execute(
         "UPDATE products SET stock_quantity = stock_quantity - ? WHERE id = ?",
         [item.quantity, item.id]
       );
+=======
+>>>>>>> 82603becc7364de2c67f9704b28566c7fc19b267
     }
 
     await connection.commit();

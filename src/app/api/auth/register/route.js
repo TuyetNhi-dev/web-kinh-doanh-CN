@@ -2,6 +2,7 @@ import { getConnection } from "@/lib/db";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 
+<<<<<<< HEAD
 async function insertUser(connection, email, hashedPassword, full_name) {
   try {
     await connection.execute(
@@ -20,6 +21,8 @@ async function insertUser(connection, email, hashedPassword, full_name) {
   }
 }
 
+=======
+>>>>>>> 82603becc7364de2c67f9704b28566c7fc19b267
 export async function POST(req) {
   let connection;
   try {
@@ -51,7 +54,14 @@ export async function POST(req) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Lưu người dùng vào DB
+<<<<<<< HEAD
     await insertUser(connection, email, hashedPassword, full_name);
+=======
+    await connection.execute(
+      "INSERT INTO users (email, password, full_name, role) VALUES (?, ?, ?, ?)",
+      [email, hashedPassword, full_name, "customer"]
+    );
+>>>>>>> 82603becc7364de2c67f9704b28566c7fc19b267
 
     return NextResponse.json(
       { message: "Đăng ký thành công!" },
@@ -59,6 +69,7 @@ export async function POST(req) {
     );
   } catch (error) {
     console.error("Lỗi đăng ký:", error);
+<<<<<<< HEAD
 
     let serverMessage = "Lỗi server khi đăng ký.";
     if (error.message.includes("DB_PASSWORD")) {
@@ -69,6 +80,10 @@ export async function POST(req) {
 
     return NextResponse.json(
       { message: serverMessage },
+=======
+    return NextResponse.json(
+      { message: "Lỗi server khi đăng ký." },
+>>>>>>> 82603becc7364de2c67f9704b28566c7fc19b267
       { status: 500 }
     );
   } finally {

@@ -30,9 +30,13 @@ export const authOptions = {
           const user = rows[0];
           console.log("Tìm thấy user:", user?.email, "Role:", user?.role);
 
+<<<<<<< HEAD
           const storedHash = user ? (user.password || user.password_hash) : null;
 
           if (user && storedHash && await bcrypt.compare(credentials.password, storedHash)) {
+=======
+          if (user && await bcrypt.compare(credentials.password, user.password)) {
+>>>>>>> 82603becc7364de2c67f9704b28566c7fc19b267
             console.log("Mật khẩu khớp!");
             return {
               id: user.id,
@@ -64,6 +68,7 @@ export const authOptions = {
           );
 
           if (rows.length === 0) {
+<<<<<<< HEAD
             try {
               await connection.execute(
                 "INSERT INTO users (email, full_name, role, password) VALUES (?, ?, ?, '')",
@@ -79,6 +84,12 @@ export const authOptions = {
                 throw error;
               }
             }
+=======
+            await connection.execute(
+              "INSERT INTO users (email, full_name, role) VALUES (?, ?, ?)",
+              [user.email, user.name, "customer"]
+            );
+>>>>>>> 82603becc7364de2c67f9704b28566c7fc19b267
           }
           return true;
         } catch (error) {

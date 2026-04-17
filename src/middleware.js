@@ -6,6 +6,7 @@ export default withAuth(
     const { pathname } = req.nextUrl;
     const { token } = req.nextauth;
 
+<<<<<<< HEAD
     console.log('🔐 Middleware Check:', {
       pathname,
       hasToken: !!token,
@@ -29,10 +30,16 @@ export default withAuth(
         return NextResponse.redirect(new URL("/login", req.url));
       }
       console.log('✅ Logged-in user allowed');
+=======
+    // Chặn User không phải Admin vào trang /admin
+    if (pathname.startsWith("/admin") && token?.role !== "admin") {
+      return NextResponse.redirect(new URL("/", req.url));
+>>>>>>> 82603becc7364de2c67f9704b28566c7fc19b267
     }
   },
   {
     callbacks: {
+<<<<<<< HEAD
       authorized: ({ token, req }) => {
         const { pathname } = req.nextUrl;
         
@@ -53,10 +60,17 @@ export default withAuth(
 
         return !!token;
       },
+=======
+      authorized: ({ token }) => !!token,
+>>>>>>> 82603becc7364de2c67f9704b28566c7fc19b267
     },
   }
 );
 
 export const config = {
+<<<<<<< HEAD
   matcher: ["/admin/:path*", "/api/admin/:path*", "/checkout/:path*", "/profile/:path*", "/orders/:path*"],
+=======
+  matcher: ["/admin/:path*", "/checkout/:path*", "/profile/:path*", "/orders/:path*"],
+>>>>>>> 82603becc7364de2c67f9704b28566c7fc19b267
 };
