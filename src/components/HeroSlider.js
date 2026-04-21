@@ -75,6 +75,16 @@ export default function HeroSlider() {
             x: { type: "spring", stiffness: 300, damping: 30 },
             opacity: { duration: 0.2 }
           }}
+          drag="x"
+          dragConstraints={{ left: 0, right: 0 }}
+          dragElastic={0.5}
+          onDragEnd={(e, { offset, velocity }) => {
+            if (offset.x < -50 || velocity.x < -500) {
+              moveSlide(1);
+            } else if (offset.x > 50 || velocity.x > 500) {
+              moveSlide(-1);
+            }
+          }}
           style={{
             position: 'absolute',
             width: '100%',
