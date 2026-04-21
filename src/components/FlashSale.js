@@ -58,9 +58,14 @@ export default function FlashSale({ products }) {
               </div>
 
               <h3 style={{ fontSize: '0.95rem', fontWeight: '600', color: '#333', marginBottom: '10px', height: '40px', overflow: 'hidden' }}>{product.name}</h3>
-              <p style={{ color: 'var(--brand-orange)', fontWeight: '800', fontSize: '1.2rem', marginBottom: '10px' }}>
-                {parseFloat(product.price * (1 - (product.discount_percent || 10) / 100)).toLocaleString('vi-VN')} đ
-              </p>
+              <div style={{ marginBottom: '10px' }}>
+                <span style={{ color: 'var(--brand-orange)', fontWeight: '800', fontSize: '1.2rem' }}>
+                  {parseFloat(product.price * (1 - (product.discount_percent || 10) / 100)).toLocaleString('vi-VN')} đ
+                </span>
+                <span style={{ marginLeft: '10px', fontSize: '0.85rem', textDecoration: 'line-through', color: '#999' }}>
+                  {parseFloat(product.price).toLocaleString('vi-VN')} đ
+                </span>
+              </div>
               <div className="progress-bar-container">
                 <div className="progress-bar-fill" style={{ width: `${80 - index * 15}%` }}></div>
               </div>

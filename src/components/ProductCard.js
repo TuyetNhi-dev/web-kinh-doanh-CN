@@ -63,7 +63,18 @@ export default function ProductCard({ product }) {
 
         <div className="product-card-footer">
           <div className="product-card-price">
-            {parseFloat(product.price).toLocaleString('vi-VN')} đ
+            {product.discount_percent || product.is_flash_sale ? (
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <span style={{ fontSize: '1.1rem', color: 'var(--brand-orange)', fontWeight: 'bold' }}>
+                  {parseFloat(product.price * (1 - (product.discount_percent || 10) / 100)).toLocaleString('vi-VN')} đ
+                </span>
+                <span style={{ fontSize: '0.8rem', textDecoration: 'line-through', color: '#999', fontWeight: 'normal' }}>
+                  {parseFloat(product.price).toLocaleString('vi-VN')} đ
+                </span>
+              </div>
+            ) : (
+              <span>{parseFloat(product.price).toLocaleString('vi-VN')} đ</span>
+            )}
           </div>
           
           <button 
