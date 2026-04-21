@@ -79,6 +79,7 @@ export default function HeroSlider() {
           drag="x"
           dragConstraints={{ left: 0, right: 0 }}
           dragElastic={0.5}
+          whileDrag={{ cursor: "grabbing" }}
           onDragEnd={(e, { offset, velocity }) => {
             if (offset.x < -50 || velocity.x < -500) {
               moveSlide(1);
@@ -95,7 +96,8 @@ export default function HeroSlider() {
             justifyContent: 'center',
             padding: '50px',
             color: '#fff',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            cursor: 'grab'
           }}
         >
           <Image
