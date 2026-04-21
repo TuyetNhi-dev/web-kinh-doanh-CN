@@ -88,15 +88,9 @@ export default function AdminProductsPage() {
               </td>
               <td>
                 <div style={{ display: 'flex', gap: '10px' }}>
-<<<<<<< HEAD
                   <a href={`/admin/products/edit/${product.id}`} style={{ color: 'var(--admin-text-muted)', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'none' }}>
                     <i className="fa-solid fa-pen-to-square"></i>
                   </a>
-=======
-                  <button style={{ color: 'var(--admin-text-muted)', background: 'none', border: 'none', cursor: 'pointer' }}>
-                    <i className="fa-solid fa-pen-to-square"></i>
-                  </button>
->>>>>>> 82603becc7364de2c67f9704b28566c7fc19b267
                   <button 
                     onClick={() => deleteProduct(product.id)}
                     style={{ color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer' }}

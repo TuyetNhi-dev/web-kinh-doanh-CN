@@ -3,10 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-<<<<<<< HEAD
 import toast from "react-hot-toast";
-=======
->>>>>>> 82603becc7364de2c67f9704b28566c7fc19b267
 
 export default function NewProductPage() {
   const router = useRouter();
@@ -41,7 +38,6 @@ export default function NewProductPage() {
       const data = await res.json();
       if (data.url) {
         setFormData({ ...formData, image_url: data.url });
-<<<<<<< HEAD
         toast.success("✓ Upload ảnh thành công!");
       } else {
         toast.error("Lỗi upload ảnh: " + (data.error || "Unknown error"));
@@ -49,18 +45,11 @@ export default function NewProductPage() {
     } catch (error) {
       console.error("Lỗi upload ảnh:", error);
       toast.error("Lỗi upload ảnh: " + error.message);
-=======
-      }
-    } catch (error) {
-      console.error("Lỗi upload ảnh:", error);
-      alert("Lỗi upload ảnh, vui lòng thử lại!");
->>>>>>> 82603becc7364de2c67f9704b28566c7fc19b267
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-<<<<<<< HEAD
     
     // Kiểm tra required fields
     if (!formData.name) {
@@ -80,18 +69,12 @@ export default function NewProductPage() {
 
     try {
       console.log("📤 Gửi dữ liệu:", formData);
-=======
-    setLoading(true);
-
-    try {
->>>>>>> 82603becc7364de2c67f9704b28566c7fc19b267
       const res = await fetch("/api/admin/products", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData)
       });
 
-<<<<<<< HEAD
       const responseData = await res.json();
       console.log("📥 Response:", responseData);
 
@@ -104,15 +87,6 @@ export default function NewProductPage() {
     } catch (error) {
       console.error("Lỗi submit:", error);
       toast.error("Lỗi: " + error.message);
-=======
-      if (res.ok) {
-        router.push("/admin/products");
-      } else {
-        alert("Lỗi thêm sản phẩm!");
-      }
-    } catch (error) {
-      console.error("Lỗi submit:", error);
->>>>>>> 82603becc7364de2c67f9704b28566c7fc19b267
     } finally {
       setLoading(false);
     }
