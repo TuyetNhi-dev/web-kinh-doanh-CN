@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function HeroSlider() {
   const [slides, setSlides] = useState([]);
@@ -89,14 +90,21 @@ export default function HeroSlider() {
             position: 'absolute',
             width: '100%',
             height: '100%',
-            background: `url(${slides[currentIndex].image_url}) center/cover no-repeat`,
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
             padding: '50px',
-            color: '#fff'
+            color: '#fff',
+            overflow: 'hidden'
           }}
         >
+          <Image
+            src={slides[currentIndex].image_url}
+            alt={slides[currentIndex].title || 'Hero Banner'}
+            fill
+            priority
+            style={{ objectFit: 'cover', zIndex: 0 }}
+          />
           {/* Lớp phủ gradient để nổi bật chữ */}
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 100%)', zIndex: 1 }}></div>
 
