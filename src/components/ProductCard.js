@@ -42,8 +42,8 @@ export default function ProductCard({ product }) {
       <div className="product-card-badge">Mới</div>
       
       <div className="product-card-image">
-        {product.image ? (
-          <img src={product.image} alt={product.name} />
+        {product.image_url ? (
+          <img src={product.image_url} alt={product.name} />
         ) : (
           <div className="product-card-placeholder">
             <i className={getIcon(product.name)}></i>

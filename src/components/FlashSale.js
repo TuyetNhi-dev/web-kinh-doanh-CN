@@ -21,8 +21,10 @@ export default function FlashSale({ products }) {
 
   const formatNum = (num) => num.toString().padStart(2, '0');
 
-  // Lấy 4 sản phẩm đầu tiên cho Flash Sale
-  const saleProducts = products.slice(0, 4);
+  // Lọc sản phẩm đang chạy Flash Sale
+  const saleProducts = products.filter(p => p.is_flash_sale);
+
+  if (saleProducts.length === 0) return null;
 
   return (
     <div className="flash-sale-container">
@@ -45,13 +47,19 @@ export default function FlashSale({ products }) {
         {saleProducts.map((product, index) => (
           <div key={product.id} style={{ position: 'relative' }}>
             <Link href={`/products/${product.id}`} className="product-card glass" style={{ display: 'block', textDecoration: 'none', padding: '15px' }}>
-              <div className="sale-badge">-{10 + index * 5}%</div>
-              <div style={{ height: '180px', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '4rem', color: '#444', marginBottom: '15px' }}>
-                <i className="fa-solid fa-laptop"></i>
+              <div className="sale-badge">-{product.discount_percent || 10}%</div>
+              
+              <div style={{ height: '180px', display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '15px' }}>
+                {product.image_url ? (
+                  <img src={product.image_url} style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }} />
+                ) : (
+                  <i className={product.category === 'Smartphone' ? 'fa-solid fa-mobile-screen' : 'fa-solid fa-laptop'} style={{ fontSize: '4rem', color: '#444' }}></i>
+                )}
               </div>
+
               <h3 style={{ fontSize: '0.95rem', fontWeight: '600', color: '#333', marginBottom: '10px', height: '40px', overflow: 'hidden' }}>{product.name}</h3>
               <p style={{ color: 'var(--brand-orange)', fontWeight: '800', fontSize: '1.2rem', marginBottom: '10px' }}>
-                {parseFloat(product.price * 0.8).toLocaleString('vi-VN')} đ
+                {parseFloat(product.price * (1 - (product.discount_percent || 10) / 100)).toLocaleString('vi-VN')} đ
               </p>
               <div className="progress-bar-container">
                 <div className="progress-bar-fill" style={{ width: `${80 - index * 15}%` }}></div>

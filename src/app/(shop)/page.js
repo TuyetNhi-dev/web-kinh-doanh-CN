@@ -10,23 +10,27 @@ import ProductCard from '@/components/ProductCard';
 
 export default function HomePage() {
   const [products, setProducts] = useState([]);
+  const [promos, setPromos] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchProducts() {
+    async function fetchData() {
       try {
-        const res = await fetch('/api/products');
-        const data = await res.json();
-        if (Array.isArray(data)) {
-          setProducts(data);
-        }
+        const [prodRes, promoRes] = await Promise.all([
+          fetch('/api/products'),
+          fetch('/api/promos')
+        ]);
+        const prodData = await prodRes.json();
+        const promoData = await promoRes.json();
+        if (Array.isArray(prodData)) setProducts(prodData);
+        if (Array.isArray(promoData)) setPromos(promoData);
       } catch (error) {
-        console.error('Lỗi fetch sản phẩm:', error);
+        console.error('Lỗi fetch dữ liệu:', error);
       } finally {
         setLoading(false);
       }
     }
-    fetchProducts();
+    fetchData();
   }, []);
 
   return (
@@ -42,30 +46,24 @@ export default function HomePage() {
         {/* FLASH SALE SECTION */}
         {!loading && <FlashSale products={products} />}
 
-        {/* Promo Small Banners */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '60px' }}>
-           <div className="glass" style={{ height: '150px', background: 'linear-gradient(135deg, #111, #333)', borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '30px', color: '#fff' }}>
-              <div>
-                <h4 style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>iPhone 15 Pro</h4>
-                <p style={{ fontSize: '0.8rem', opacity: 0.8 }}>Thu cũ đổi mới - Giá tốt nhất</p>
-                <button style={{ marginTop: '10px', background: 'transparent', color: '#fff', border: '1px solid #fff', padding: '5px 15px', borderRadius: '20px', fontSize: '0.7rem' }}>CHI TIẾT</button>
-              </div>
-           </div>
-           <div className="glass" style={{ height: '150px', background: 'linear-gradient(135deg, #f57224, #ff8a44)', borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '30px', color: '#fff' }}>
-              <div>
-                <h4 style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>Phụ Kiện Gaming</h4>
-                <p style={{ fontSize: '0.8rem', opacity: 0.8 }}>Giảm ngay 200k khi mua Combo</p>
-                <button style={{ marginTop: '10px', background: 'rgba(255,255,255,0.2)', color: '#fff', border: 'none', padding: '5px 15px', borderRadius: '20px', fontSize: '0.7rem' }}>SĂN DEAL</button>
-              </div>
-           </div>
-           <div className="glass" style={{ height: '150px', background: 'linear-gradient(135deg, #444, #000)', borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '30px', color: '#fff' }}>
-              <div>
-                <h4 style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>Apple Watch Ultra</h4>
-                <p style={{ fontSize: '0.8rem', opacity: 0.8 }}>Trả góp 0% lãi suất</p>
-                <button style={{ marginTop: '10px', background: 'transparent', color: '#fff', border: '1px solid #fff', padding: '5px 15px', borderRadius: '20px', fontSize: '0.7rem' }}>XEM NGAY</button>
-              </div>
-           </div>
-        </div>
+        {/* Promo Small Banners (Bento Grid) */}
+        {!loading && promos.length > 0 && (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '60px' }}>
+             {promos.map(promo => (
+               <Link key={promo.id} href={promo.link || '/products'}>
+                 <div className="glass" style={{ height: '150px', background: promo.gradient, borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '30px', color: '#fff', cursor: 'pointer' }}>
+                   <div>
+                     <h4 style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>{promo.title}</h4>
+                     <p style={{ fontSize: '0.8rem', opacity: 0.8 }}>{promo.subtitle}</p>
+                     <button style={{ marginTop: '10px', background: 'rgba(255,255,255,0.2)', color: '#fff', border: '1px solid rgba(255,255,255,0.4)', padding: '5px 15px', borderRadius: '20px', fontSize: '0.7rem' }}>
+                       {promo.button_text || 'XEM NGAY'}
+                     </button>
+                   </div>
+                 </div>
+               </Link>
+             ))}
+          </div>
+        )}
 
         {/* Featured Products */}
         <section style={{ paddingBottom: '80px' }}>

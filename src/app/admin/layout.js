@@ -12,6 +12,9 @@ export default function AdminLayout({ children }) {
   const navItems = [
     { name: 'Dashboard', icon: 'fa-solid fa-chart-line', path: '/admin' },
     { name: 'Sản phẩm', icon: 'fa-solid fa-box', path: '/admin/products' },
+    { name: 'Quản lý Slider', icon: 'fa-solid fa-image', path: '/admin/banners' },
+    { name: 'Flash Sale', icon: 'fa-solid fa-bolt', path: '/admin/flash-sale' },
+    { name: 'Khuyến mãi Bento', icon: 'fa-solid fa-grid-2', path: '/admin/promos' },
     { name: 'Đơn hàng', icon: 'fa-solid fa-cart-shopping', path: '/admin/orders' },
     { name: 'Khách hàng', icon: 'fa-solid fa-users', path: '/admin/users' },
     { name: 'Cài đặt', icon: 'fa-solid fa-gear', path: '/admin/settings' },
@@ -23,7 +26,7 @@ export default function AdminLayout({ children }) {
       <aside className="admin-sidebar">
         <div className="admin-logo">
           <Link href="/" style={{ textDecoration: 'none' }}>
-            <h2>TECH STORE</h2>
+            <h2>HBN TECH STORE</h2>
           </Link>
         </div>
 
