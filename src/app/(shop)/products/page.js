@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useCartStore } from '@/store/useCartStore';
@@ -20,7 +21,7 @@ const PRICE_RANGES = [
   { label: 'Trên 40 triệu', min: 40000000, max: null },
 ];
 
-export default function ProductsPage() {
+function ProductsContent() {
   const searchParams = useSearchParams();
   const searchKeyword = searchParams.get('search');
   const sortParam = searchParams.get('sort');
@@ -154,5 +155,13 @@ export default function ProductsPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={<div className="container" style={{ padding: '80px 20px', textAlign: 'center' }}>Đang tải...</div>}>
+      <ProductsContent />
+    </Suspense>
   );
 }
