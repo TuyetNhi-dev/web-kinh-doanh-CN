@@ -20,10 +20,17 @@ export async function POST(req) {
     connection = await getConnection();
     await connection.beginTransaction();
 
-    // 1. Lưu vào bảng orders
+    // Lấy user_id từ email
+    const [userRows] = await connection.execute(
+      "SELECT id FROM users WHERE email = ?",
+      [session.user.email]
+    );
+    const userId = userRows.length > 0 ? userRows[0].id : null;
+
+    // 1. Lưu vào bảng orders (kèm thông tin giao hàng)
     const [orderResult] = await connection.execute(
-      "INSERT INTO orders (user_id, total_amount, status) VALUES (?, ?, ?)",
-      [session.user.id || null, totalAmount, "pending"]
+      "INSERT INTO orders (user_id, total_amount, status, customer_name, customer_email, shipping_name, shipping_phone, shipping_address, payment_method) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      [userId, totalAmount, "pending", shippingInfo?.fullName || '', session.user.email, shippingInfo?.fullName || '', shippingInfo?.phone || '', shippingInfo?.address || '', shippingInfo?.paymentMethod || 'cod']
     );
     const orderId = orderResult.insertId;
 

@@ -68,17 +68,35 @@ export default function Header() {
             {session ? (
               <div 
                 className="action-item" 
-                style={{ cursor: 'pointer' }} 
-                onClick={() => {
-                  if (window.confirm("Bạn có muốn đăng xuất khỏi HBN TechStore không?")) {
-                    signOut();
-                  }
-                }}
+                style={{ cursor: 'pointer', position: 'relative' }} 
+                onMouseEnter={(e) => { e.currentTarget.querySelector('.user-dropdown')?.classList.add('show'); }}
+                onMouseLeave={(e) => { e.currentTarget.querySelector('.user-dropdown')?.classList.remove('show'); }}
               >
                 <i className="fa-regular fa-user"></i>
                 <div style={{ lineHeight: '1.2' }}>
                   <span style={{display: 'block', fontSize: '0.85rem', fontWeight: 'bold'}}>{session.user.name}</span>
-                  <span style={{fontSize: '0.75rem', color: '#888'}}>Đăng xuất</span>
+                  <span style={{fontSize: '0.75rem', color: '#888'}}>Tài khoản ▾</span>
+                </div>
+
+                {/* User Dropdown */}
+                <div className="user-dropdown" style={{
+                  position: 'absolute', top: '100%', right: 0, minWidth: '200px', background: 'var(--card-bg, #1a1a2e)', 
+                  border: '1px solid var(--border-color)', borderRadius: '12px', boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
+                  padding: '8px 0', zIndex: 1000, display: 'none', marginTop: '8px'
+                }}>
+                  <Link href="/profile" style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 20px', color: 'var(--text-primary)', textDecoration: 'none', fontSize: '0.9rem' }}>
+                    <i className="fa-solid fa-user-gear" style={{ width: '16px', color: 'var(--brand-orange)' }}></i> Thông tin cá nhân
+                  </Link>
+                  <Link href="/orders" style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 20px', color: 'var(--text-primary)', textDecoration: 'none', fontSize: '0.9rem' }}>
+                    <i className="fa-solid fa-clock-rotate-left" style={{ width: '16px', color: 'var(--brand-orange)' }}></i> Lịch sử đơn hàng
+                  </Link>
+                  <div style={{ height: '1px', background: 'var(--border-color)', margin: '6px 0' }}></div>
+                  <div 
+                    onClick={() => { if (window.confirm("Bạn có muốn đăng xuất không?")) signOut(); }}
+                    style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 20px', color: '#ef4444', cursor: 'pointer', fontSize: '0.9rem' }}
+                  >
+                    <i className="fa-solid fa-right-from-bracket" style={{ width: '16px' }}></i> Đăng xuất
+                  </div>
                 </div>
               </div>
             ) : (

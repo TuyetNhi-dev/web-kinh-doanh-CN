@@ -82,7 +82,7 @@ export default function LoginPage() {
           <div style={{ textAlign: 'left' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
               <label style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Mật khẩu</label>
-              <a href="#" style={{ fontSize: '0.85rem' }}>Quên mật khẩu?</a>
+              <a href="/forgot-password" style={{ fontSize: '0.85rem' }}>Quên mật khẩu?</a>
             </div>
             <input 
               {...register("password")}

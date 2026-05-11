@@ -1085,6 +1085,16 @@ header {
   font-weight: 600;
 }
 
+/* User Dropdown Menu */
+.user-dropdown.show {
+  display: block !important;
+}
+
+.user-dropdown a:hover,
+.user-dropdown div[style*="cursor: pointer"]:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
 /* =========================================
    RESPONSIVE DESIGN (MOBILE & TABLET)
 ========================================= */

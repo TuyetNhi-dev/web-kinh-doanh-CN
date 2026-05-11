@@ -3,6 +3,7 @@
 import { useCartStore } from "@/store/useCartStore";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import ProductReviews from "@/components/ProductReviews";
 
 export default function ProductClient({ product }) {
   const addToCart = useCartStore((state) => state.addToCart);
@@ -69,6 +70,11 @@ export default function ProductClient({ product }) {
            <p><i className="fa-solid fa-shield-halved" style={{color: 'var(--accent-color)', marginRight: '10px'}}></i> Bảo hành chính hãng 12 tháng</p>
            <p><i className="fa-solid fa-rotate" style={{color: 'var(--accent-color)', marginRight: '10px'}}></i> Đổi trả trong 7 ngày nếu có lỗi NSX</p>
         </div>
+      </div>
+
+      {/* Product Reviews */}
+      <div style={{ gridColumn: "1 / -1" }}>
+        <ProductReviews productId={product.id} />
       </div>
     </div>
   );
