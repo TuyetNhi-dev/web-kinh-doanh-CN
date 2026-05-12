@@ -42,7 +42,7 @@ export default function HeroSlider() {
     setCurrentIndex((prevIndex) => (prevIndex + newDirection + slides.length) % slides.length);
   };
 
-  if (loading) return <div style={{ height: '430px', background: '#eee', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '12px' }}>Đang tải banner...</div>;
+  if (loading) return <div style={{ height: '430px', background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '12px', color: '#888' }}><i className="fa-solid fa-spinner fa-spin" style={{ marginRight: '8px' }}></i>Đang tải banner...</div>;
   if (slides.length === 0) return null;
 
   const variants = {
@@ -93,10 +93,9 @@ export default function HeroSlider() {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            padding: '50px',
             color: '#fff',
             overflow: 'hidden',
-            cursor: 'pointer'
+            cursor: 'grab',
           }}
         >
           <Image
@@ -109,20 +108,20 @@ export default function HeroSlider() {
           {/* Lớp phủ gradient để nổi bật chữ */}
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 100%)', zIndex: 1 }}></div>
 
-          <div style={{ position: 'relative', zIndex: 2, maxWidth: '500px' }}>
-            <motion.h2 
+          <div className="hero-slide-inner" style={{ position: 'relative', zIndex: 2, maxWidth: '500px' }}>
+            <motion.h2
+              className="hero-slide-title"
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.2 }}
-              style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '15px', color: '#fff' }}
             >
               {slides[currentIndex].title}
             </motion.h2>
-            <motion.p 
+            <motion.p
+              className="hero-slide-subtitle"
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3 }}
-              style={{ fontSize: '1.2rem', marginBottom: '30px', color: 'rgba(255,255,255,0.9)' }}
             >
               {slides[currentIndex].subtitle}
             </motion.p>

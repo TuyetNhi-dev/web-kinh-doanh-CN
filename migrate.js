@@ -98,6 +98,27 @@ async function migrate() {
     else console.error('❌ Error:', e.message);
   }
 
+  // 5. Create notifications table
+  try {
+    await connection.execute(`
+      CREATE TABLE IF NOT EXISTS notifications (
+        id          INT AUTO_INCREMENT PRIMARY KEY,
+        user_id     INT NOT NULL,
+        type        ENUM('order', 'promo', 'system') NOT NULL DEFAULT 'order',
+        title       VARCHAR(255) NOT NULL,
+        content     TEXT,
+        is_read     BOOLEAN NOT NULL DEFAULT FALSE,
+        created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+        INDEX idx_user_id (user_id),
+        INDEX idx_is_read (is_read)
+      )
+    `);
+    console.log('✅ Created table: notifications');
+  } catch (e) {
+    console.error('❌ Error creating notifications:', e.message);
+  }
+
   console.log('\n🎉 Migration completed!');
   await connection.end();
 }
