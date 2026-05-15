@@ -559,17 +559,25 @@ header {
   gap: 30px;
 }
 
+.hero-section-grid {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 15px;
+  margin-bottom: 30px;
+  position: relative;
+}
+
 .category-btn {
-  background-color: rgba(245, 114, 36, 0.1);
-  color: var(--brand-orange);
+  background-color: var(--brand-orange);
+  color: #fff;
   padding: 10px 20px;
   display: flex;
   align-items: center;
   gap: 10px;
   font-weight: 600;
   cursor: pointer;
-  border-radius: 30px;
-  border: 1px solid rgba(245, 114, 36, 0.2);
+  border-radius: 6px;
+  border: none;
 }
 
 .category-btn i {
