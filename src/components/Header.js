@@ -188,12 +188,13 @@ export default function Header() {
                     <i className="fa-solid fa-clock-rotate-left"></i> Lịch sử đơn hàng
                   </Link>
                   <div className="user-dropdown-divider" />
-                  <div
+                  <button
                     className="user-dropdown-logout"
-                    onClick={() => { if (window.confirm("Bạn có muốn đăng xuất không?")) signOut(); }}
+                    onClick={() => signOut()}
+                    style={{ width: '100%', border: 'none', background: 'none', textAlign: 'left', font: 'inherit' }}
                   >
                     <i className="fa-solid fa-right-from-bracket"></i> Đăng xuất
-                  </div>
+                  </button>
                 </div>
               </div>
             ) : (

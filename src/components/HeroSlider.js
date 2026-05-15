@@ -101,12 +101,17 @@ export default function HeroSlider() {
             cursor: 'grab',
           }}
         >
-          <Image
+          <img
             src={slides[currentIndex].image_url}
             alt={slides[currentIndex].title || 'Hero Banner'}
-            fill
-            priority
-            style={{ objectFit: 'cover', zIndex: 0 }}
+            style={{ 
+              position: 'absolute', 
+              inset: 0, 
+              width: '100%', 
+              height: '100%', 
+              objectFit: 'cover', 
+              zIndex: 0 
+            }}
           />
           {/* Lớp phủ gradient để nổi bật chữ - làm nhẹ hơn cho Laptop */}
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.1) 100%)', zIndex: 1 }}></div>
