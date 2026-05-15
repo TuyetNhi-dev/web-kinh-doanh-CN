@@ -1315,7 +1315,9 @@ header {
 .user-dropdown {
   position: absolute;
   top: 100%;
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  right: auto;
   min-width: 200px;
   background: #fff;
   border: 1px solid var(--border-color);
