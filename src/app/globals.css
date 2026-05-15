@@ -1502,6 +1502,7 @@ header {
   height: 50px;
   width: auto;
   object-fit: contain;
+  filter: brightness(0);
   image-rendering: -webkit-optimize-contrast;
 }
 
