@@ -352,7 +352,9 @@ a:hover {
   background: var(--card-bg);
   border: 1px solid var(--border-color);
   border-radius: 12px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  /* Optimization for scroll */
+  backface-visibility: hidden;
 }
 
 .btn {
@@ -686,6 +688,14 @@ header {
   overflow: hidden;
   border: 1px solid var(--border-color);
   position: relative;
+  /* Performance Tweak */
+  will-change: transform, box-shadow;
+  transition: transform 0.3s cubic-bezier(0.2, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 
 .product-card-badge {
@@ -1438,7 +1448,10 @@ header {
   top: 0;
   z-index: 1001;
   background-color: #fff;
-  box-shadow: 0 4px 6px -6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  /* GPU Acceleration */
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .header-logo {

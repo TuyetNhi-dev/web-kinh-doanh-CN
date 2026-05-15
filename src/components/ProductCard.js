@@ -36,11 +36,7 @@ export default function ProductCard({ product }) {
 
   return (
     <Link href={`/products/${product.id}`} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
-      <motion.div 
-        className="product-card glass"
-        whileHover={{ y: -10, boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}
-        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-      >
+      <div className="product-card glass">
         <div className="product-card-badge">Mới</div>
         
         <div className="product-card-image">
@@ -87,7 +83,7 @@ export default function ProductCard({ product }) {
             </button>
           </div>
         </div>
-      </motion.div>
+      </div>
     </Link>
   );
 }
