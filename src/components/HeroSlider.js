@@ -16,11 +16,14 @@ export default function HeroSlider() {
       try {
         const res = await fetch('/api/banners');
         const data = await res.json();
-        if (data.length > 0) {
+        console.log('DEBUG: Banner API response:', data);
+        if (data && Array.isArray(data) && data.length > 0) {
           setSlides(data);
+        } else {
+          console.warn('DEBUG: No banners found or invalid data');
         }
       } catch (e) {
-        console.error('Lỗi tải banner:', e);
+        console.error('DEBUG: Lỗi tải banner:', e);
       } finally {
         setLoading(false);
       }

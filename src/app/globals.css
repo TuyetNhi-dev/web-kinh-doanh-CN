@@ -1502,8 +1502,7 @@ header {
   height: 50px;
   width: auto;
   object-fit: contain;
-  filter: brightness(0) contrast(1000%) !important;
-  image-rendering: -webkit-optimize-contrast; /* Giúp ảnh sắc nét hơn trên trình duyệt */
+  image-rendering: -webkit-optimize-contrast;
 }
 
 .search-submit-btn {
