@@ -24,7 +24,15 @@ async function insertUser(connection, email, hashedPassword, full_name) {
 export async function POST(req) {
   let connection;
   try {
-    const { email, password, full_name } = await req.json();
+    const { email, password, full_name, username } = await req.json();
+
+    // Honeypot check (Bot protection)
+    if (username) {
+      return NextResponse.json(
+        { message: "Bot detected. Registration rejected." },
+        { status: 403 }
+      );
+    }
 
     if (!email || !password || !full_name) {
       return NextResponse.json(

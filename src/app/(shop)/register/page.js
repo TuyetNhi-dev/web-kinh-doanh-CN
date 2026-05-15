@@ -41,6 +41,7 @@ export default function RegisterPage() {
           email: data.email,
           password: data.password,
           full_name: data.full_name,
+          username: data.username, // Honeypot field
         }),
       });
 
@@ -146,6 +147,11 @@ export default function RegisterPage() {
               />
               {errors.confirmPassword && <span style={{ fontSize: '0.8rem', color: '#ff4d4d', marginTop: '5px' }}>{errors.confirmPassword.message}</span>}
             </div>
+          </div>
+
+          {/* Honeypot field (hidden from users) */}
+          <div style={{ display: 'none' }} aria-hidden="true">
+            <input {...register("username")} tabIndex="-1" autoComplete="off" />
           </div>
 
           <button 
