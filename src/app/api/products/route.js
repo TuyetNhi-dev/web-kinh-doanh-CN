@@ -31,22 +31,23 @@ export async function GET(req) {
     if (search) {
       query += ' AND (name LIKE ? OR description LIKE ?)';
       params.push(`%${search}%`, `%${search}%`);
-      // Ưu tiên các sản phẩm có tên bắt đầu bằng từ khóa tìm kiếm
-      query += ' ORDER BY CASE WHEN name LIKE ? THEN 0 ELSE 1 END';
-      params.push(`${search}%`);
-    } else if (sort === 'bestseller') {
-      query += ' ORDER BY stock_quantity ASC, created_at DESC';
-    } else if (sort === 'newest') {
-      query += ' ORDER BY created_at DESC';
-    } else {
-      query += ' ORDER BY created_at DESC';
     }
 
     if (sale === 'true') {
       query += ' AND (is_flash_sale = 1 OR discount_percent > 0)';
     }
 
-    const limitParam = searchParams.get('limit') || 10;
+    // ORDER BY logic (Must be AFTER all WHERE clauses)
+    if (search) {
+      query += ' ORDER BY CASE WHEN name LIKE ? THEN 0 ELSE 1 END';
+      params.push(`${search}%`);
+    } else if (sort === 'bestseller') {
+      query += ' ORDER BY stock_quantity ASC, created_at DESC';
+    } else {
+      query += ' ORDER BY created_at DESC';
+    }
+
+    const limitParam = searchParams.get('limit') || 20; // Tăng limit mặc định lên 20 cho trang chủ
     const pageParam  = searchParams.get('page') || 1;
     const offset     = (Number(pageParam) - 1) * Number(limitParam);
 
