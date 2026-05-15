@@ -208,7 +208,9 @@ body {
 
 .flash-sale-header {
   padding: 20px;
-  background: linear-gradient(90deg, #f57224, #ff8a44);
+  background: rgba(245, 114, 36, 0.1);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(245, 114, 36, 0.1);
   color: #fff;
   display: flex;
   justify-content: space-between;
@@ -231,15 +233,42 @@ body {
   align-items: center;
 }
 
-.countdown-box {
-  background: #000;
-  color: #fff;
-  padding: 5px 8px;
-  border-radius: 4px;
-  font-weight: bold;
+.flash-sale-container {
+  margin-bottom: 40px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Product Card Flash Sale Badge */
+.flash-sale-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 15px;
+  padding: 20px;
+}
+
+@media (max-width: 1024px) {
+  .flash-sale-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .flash-sale-grid { 
+    grid-template-columns: repeat(2, 1fr);
+    padding: 12px;
+    gap: 10px;
+  }
+}
+
+.countdown-box {
+  background: rgba(245, 114, 36, 0.2);
+  color: var(--brand-orange);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 800;
+  border: 1px solid rgba(245, 114, 36, 0.3);
+}
+
 .sale-badge {
   position: absolute;
   top: 10px;
@@ -247,17 +276,18 @@ body {
   background: var(--brand-orange);
   color: #fff;
   font-size: 0.75rem;
-  font-weight: bold;
-  padding: 4px 8px;
-  border-radius: 4px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 6px;
   z-index: 2;
+  box-shadow: 0 4px 10px rgba(245, 114, 36, 0.4);
 }
 
 .progress-bar-container {
-  height: 10px;
-  background: #eee;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 10px;
-  margin: 10px 0;
+  margin: 12px 0;
   position: relative;
   overflow: hidden;
 }
@@ -265,15 +295,17 @@ body {
 .progress-bar-fill {
   position: absolute;
   height: 100%;
-  background: var(--brand-orange);
+  background: linear-gradient(90deg, var(--brand-orange), #ff8a44);
   border-radius: 10px;
 }
 
 .sold-text {
-  font-size: 0.75rem;
-  color: #888;
+  font-size: 0.7rem;
+  color: #999;
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 /* Hero Slider Area */
@@ -410,8 +442,8 @@ header {
 }
 
 .header-top {
-  background-color: var(--brand-orange);
-  border-bottom: 1px solid rgba(0,0,0,0.1);
+  background-color: #000;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   font-size: 0.85rem;
   padding: 8px 0;
 }
@@ -549,15 +581,16 @@ header {
 }
 
 .category-btn {
-  background-color: #000;
-  color: #fff;
+  background-color: rgba(245, 114, 36, 0.1);
+  color: var(--brand-orange);
   padding: 10px 20px;
   display: flex;
   align-items: center;
   gap: 10px;
   font-weight: 600;
   cursor: pointer;
-  border-radius: 6px;
+  border-radius: 30px;
+  border: 1px solid rgba(245, 114, 36, 0.2);
 }
 
 .category-btn i {
@@ -1472,8 +1505,8 @@ header {
   position: sticky;
   top: 0;
   z-index: 1001;
-  background-color: #fff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  background-color: #000 !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   /* GPU Acceleration */
   will-change: transform;
   transform: translateZ(0);
@@ -1489,7 +1522,7 @@ header {
 .header-logo-img {
   height: 50px;
   object-fit: contain;
-  filter: brightness(0.2) contrast(1.5);
+  filter: brightness(0) invert(1); /* Làm logo thành màu trắng hoàn toàn */
 }
 
 .search-submit-btn {
@@ -1528,39 +1561,40 @@ header {
 .mobile-nav-logo {
   height: 40px;
   object-fit: contain;
-  filter: brightness(0.2) contrast(1.5);
+  filter: brightness(0) invert(1);
 }
 
 /* Mobile search inside drawer */
 .mobile-search-wrapper {
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--border-color);
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .mobile-search-form {
   position: relative;
   display: flex;
-  align-items: center;
 }
 
 .mobile-search-form input {
   width: 100%;
-  padding: 10px 40px 10px 14px;
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
+  padding: 10px 15px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.2);
+  color: #fff;
   font-size: 0.9rem;
   outline: none;
-  background: #f9f9f9;
 }
 
 .mobile-search-form button {
-  background: none;
-  border: none;
   position: absolute;
   right: 12px;
-  cursor: pointer;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
   color: #888;
-  padding: 0;
 }
 
 /* Mobile nav admin & logout */
@@ -1855,7 +1889,8 @@ header {
   border-radius: 0;
   width: 280px;
   overflow-y: auto;
-  background: #fff;
+  background: rgba(10, 10, 10, 0.95);
+  backdrop-filter: blur(20px);
   animation: slideInLeft 0.3s ease;
 }
 
