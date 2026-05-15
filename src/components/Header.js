@@ -4,7 +4,7 @@ import { useSession, signOut } from "next-auth/react";
 import { useCartStore } from "@/store/useCartStore";
 import { useNotificationStore } from "@/store/useNotificationStore";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import NotificationDropdown from "./NotificationDropdown";
 import CategorySidebar from "./CategorySidebar";
@@ -30,6 +30,8 @@ export default function Header() {
   const [isSearching, setIsSearching]       = useState(false);
 
   const router = useRouter();
+  const pathname = usePathname();
+  const isHomePage = pathname === "/";
 
   useEffect(() => { setMounted(true); }, []);
 
@@ -248,7 +250,7 @@ export default function Header() {
               <i className="fa-solid fa-bars"></i>
               <span>Danh mục sản phẩm</span>
             </div>
-            {isCategoryOpen && (
+            {isCategoryOpen && !isHomePage && (
               <div className="category-dropdown-panel">
                 <CategorySidebar />
               </div>
