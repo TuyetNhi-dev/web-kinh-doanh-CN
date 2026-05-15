@@ -37,9 +37,8 @@ body {
 }
 
 .category-sidebar {
-  background: rgba(15, 15, 15, 0.9);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: #fff;
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   overflow: hidden;
   height: 100%;
@@ -431,8 +430,8 @@ header {
 }
 
 .header-top {
-  background-color: #000;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background-color: var(--brand-orange);
+  border-bottom: 1px solid rgba(0,0,0,0.1);
   font-size: 0.85rem;
   padding: 8px 0;
 }
