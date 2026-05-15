@@ -1324,7 +1324,16 @@ header {
   padding: 8px 0;
   z-index: 1000;
   display: none;
-  margin-top: 8px;
+  margin-top: 0;
+}
+
+.user-dropdown::before {
+  content: '';
+  position: absolute;
+  top: -15px;
+  left: 0;
+  right: 0;
+  height: 15px;
 }
 
 .user-dropdown.show {
