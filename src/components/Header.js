@@ -150,7 +150,7 @@ export default function Header() {
               <i className="fa-solid fa-cart-shopping"></i>
               <div className="action-text">
                 <span className="action-text-main">Giỏ hàng</span>
-                <span className="action-text-sub">{mounted ? totalItems : 0} sp</span>
+                <span className="action-text-sub">{mounted ? totalItems : 0} sản phẩm</span>
               </div>
             </Link>
           </div>
