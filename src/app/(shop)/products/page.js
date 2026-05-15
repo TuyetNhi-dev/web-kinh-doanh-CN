@@ -82,12 +82,17 @@ function ProductsContent() {
 
   const [products, setProducts]                 = useState([]);
   const [loading, setLoading]                   = useState(true);
+  const [loadingMore, setLoadingMore]           = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedPrice, setSelectedPrice]       = useState(null);
   const [isSidebarOpen, setIsSidebarOpen]       = useState(false);
+  const [page, setPage]                         = useState(1);
+  const [hasMore, setHasMore]                   = useState(true);
 
-  const fetchProducts = useCallback(async () => {
-    setLoading(true);
+  const fetchProducts = useCallback(async (pageNum = 1, isAppend = false) => {
+    if (isAppend) setLoadingMore(true);
+    else setLoading(true);
+
     try {
       const params = new URLSearchParams();
       if (selectedCategory !== "all") params.set("category", selectedCategory);
@@ -99,18 +104,39 @@ function ProductsContent() {
       if (searchKeyword) params.set("search", searchKeyword);
       if (sortParam)     params.set("sort", sortParam);
       if (saleParam)     params.set("sale", saleParam);
+      
+      params.set("page", pageNum);
+      params.set("limit", 8);
 
       const res  = await fetch(`/api/products?${params.toString()}`);
       const data = await res.json();
-      setProducts(Array.isArray(data) ? data : []);
+      
+      if (Array.isArray(data)) {
+        if (isAppend) {
+          setProducts(prev => [...prev, ...data]);
+        } else {
+          setProducts(data);
+        }
+        setHasMore(data.length === 8);
+      }
     } catch {
-      setProducts([]);
+      if (!isAppend) setProducts([]);
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
   }, [selectedCategory, selectedPrice, searchKeyword, sortParam, saleParam]);
 
-  useEffect(() => { fetchProducts(); }, [fetchProducts]);
+  useEffect(() => { 
+    setPage(1);
+    fetchProducts(1, false); 
+  }, [fetchProducts]);
+
+  const handleLoadMore = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    fetchProducts(nextPage, true);
+  };
 
   useEffect(() => {
     document.body.style.overflow = isSidebarOpen ? "hidden" : "";
@@ -177,9 +203,10 @@ function ProductsContent() {
         {/* Product Grid */}
         <div className="catalog-main">
           {loading ? (
-            <div className="products-state">
-              <i className="fa-solid fa-spinner fa-spin products-state-icon"></i>
-              <p>Đang tải sản phẩm...</p>
+            <div className="product-grid" style={{ padding: 0 }}>
+              {[...Array(8)].map((_, i) => (
+                <div key={i} className="product-card-skeleton glass" style={{ height: '350px', animation: 'pulse 1.5s infinite' }}></div>
+              ))}
             </div>
           ) : products.length === 0 ? (
             <div className="products-state">
@@ -187,11 +214,29 @@ function ProductsContent() {
               <p>Không tìm thấy sản phẩm nào phù hợp.</p>
             </div>
           ) : (
-            <div className="product-grid" style={{ padding: 0 }}>
-              {products.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
+            <>
+              <div className="product-grid" style={{ padding: 0 }}>
+                {products.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+
+              {hasMore && (
+                <div className="load-more-container">
+                  <button 
+                    className="load-more-btn glass" 
+                    onClick={handleLoadMore}
+                    disabled={loadingMore}
+                  >
+                    {loadingMore ? (
+                      <><i className="fa-solid fa-circle-notch fa-spin"></i> ĐANG TẢI...</>
+                    ) : (
+                      "XEM THÊM SẢN PHẨM"
+                    )}
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
