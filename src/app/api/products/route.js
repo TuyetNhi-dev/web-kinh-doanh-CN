@@ -47,12 +47,11 @@ export async function GET(req) {
       query += ' ORDER BY created_at DESC';
     }
 
-    const limitParam = searchParams.get('limit') || 20; // Tăng limit mặc định lên 20 cho trang chủ
-    const pageParam  = searchParams.get('page') || 1;
-    const offset     = (Number(pageParam) - 1) * Number(limitParam);
+    const limitVal = parseInt(searchParams.get('limit') || '20');
+    const pageVal  = parseInt(searchParams.get('page') || '1');
+    const offsetVal = (pageVal - 1) * limitVal;
 
-    query += ' LIMIT ? OFFSET ?';
-    params.push(Number(limitParam), offset);
+    query += ` LIMIT ${limitVal} OFFSET ${offsetVal}`;
 
     connection = await getConnection();
     const [rows] = await connection.execute(query, params);
