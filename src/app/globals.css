@@ -1501,7 +1501,7 @@ header {
 .header-logo-img {
   height: 50px;
   object-fit: contain;
-  filter: none !important;
+  filter: brightness(0) !important;
 }
 
 .search-submit-btn {
