@@ -105,8 +105,8 @@ export default function HeroSlider() {
             priority
             style={{ objectFit: 'cover', zIndex: 0 }}
           />
-          {/* Lớp phủ gradient để nổi bật chữ */}
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 100%)', zIndex: 1 }}></div>
+          {/* Lớp phủ gradient để nổi bật chữ - làm nhẹ hơn cho Laptop */}
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.1) 100%)', zIndex: 1 }}></div>
 
           <div className="hero-slide-inner" style={{ position: 'relative', zIndex: 2, maxWidth: '500px' }}>
             <motion.h2
