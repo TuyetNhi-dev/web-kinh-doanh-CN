@@ -25,10 +25,44 @@ export default function Header() {
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery]       = useState("");
+  const [searchResults, setSearchResults]   = useState([]);
+  const [showResults, setShowResults]       = useState(false);
+  const [isSearching, setIsSearching]       = useState(false);
 
   const router = useRouter();
 
   useEffect(() => { setMounted(true); }, []);
+
+  // Live Search Logic (AJAX)
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      if (searchQuery.trim().length > 1) {
+        setIsSearching(true);
+        try {
+          const res = await fetch(`/api/products?search=${encodeURIComponent(searchQuery)}`);
+          const data = await res.json();
+          setSearchResults(Array.isArray(data) ? data.slice(0, 5) : []);
+          setShowResults(true);
+        } catch (err) {
+          console.error("Live search error:", err);
+        } finally {
+          setIsSearching(false);
+        }
+      } else {
+        setSearchResults([]);
+        setShowResults(false);
+      }
+    }, 300); // Debounce 300ms
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  // Click outside to close search results
+  useEffect(() => {
+    const handleClick = () => setShowResults(false);
+    window.addEventListener("click", handleClick);
+    return () => window.removeEventListener("click", handleClick);
+  }, []);
 
   // Fetch thông báo từ API sau khi đăng nhập
   useEffect(() => {
@@ -40,6 +74,7 @@ export default function Header() {
       if (e.key === "Escape") {
         setIsMobileMenuOpen(false);
         setIsNotifyOpen(false);
+        setShowResults(false);
       }
     };
     document.addEventListener("keydown", onKey);
@@ -73,16 +108,60 @@ export default function Header() {
             <img src="/logo.png" alt="HBN Tech Store" className="header-logo-img" />
           </Link>
 
-          <form className="search-bar" onSubmit={handleSearch}>
+          <form className="search-bar" onSubmit={handleSearch} onClick={(e) => e.stopPropagation()}>
             <input
               type="text"
               placeholder="Tìm kiếm laptop, điện thoại, phụ kiện..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              onFocus={() => searchQuery.trim().length > 1 && setShowResults(true)}
             />
             <button type="submit" className="search-submit-btn" aria-label="Tìm kiếm">
-              <i className="fa-solid fa-magnifying-glass"></i>
+              {isSearching ? (
+                <i className="fa-solid fa-circle-notch fa-spin"></i>
+              ) : (
+                <i className="fa-solid fa-magnifying-glass"></i>
+              )}
             </button>
+
+            {/* Live Search Results Dropdown */}
+            {showResults && (
+              <div className="search-results-dropdown glass">
+                {searchResults.length > 0 ? (
+                  searchResults.map((product) => (
+                    <Link
+                      key={product.id}
+                      href={`/products/${product.id}`}
+                      className="search-result-item"
+                      onClick={() => setShowResults(false)}
+                    >
+                      <div className="search-result-img">
+                        {product.image_url ? (
+                          <img src={product.image_url} alt={product.name} />
+                        ) : (
+                          <i className="fa-solid fa-box"></i>
+                        )}
+                      </div>
+                      <div className="search-result-info">
+                        <div className="search-result-name">{product.name}</div>
+                        <div className="search-result-price">
+                          {parseFloat(product.price).toLocaleString("vi-VN")} đ
+                        </div>
+                      </div>
+                    </Link>
+                  ))
+                ) : (
+                  <div className="search-no-results">Không tìm thấy sản phẩm nào.</div>
+                )}
+                <Link
+                  href={`/products?search=${encodeURIComponent(searchQuery)}`}
+                  className="search-view-all"
+                  onClick={() => setShowResults(false)}
+                >
+                  Xem tất cả kết quả
+                </Link>
+              </div>
+            )}
           </form>
 
           <div className="header-actions">
