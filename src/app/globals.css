@@ -1009,6 +1009,11 @@ header {
   font-size: 0.9rem;
 }
 
+/* Payment Methods Section - Now moved to column 1 */
+.payment-methods-sidebar {
+  margin-top: 20px;
+}
+
 /* Catalog Page Variables (Phong Vu inspired but TechStore aesthetic) */
 :root {
   --pv-blue: #1435c3;

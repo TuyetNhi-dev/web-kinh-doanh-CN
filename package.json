@@ -12,6 +12,7 @@
     "@hookform/resolvers": "^5.2.2",
     "axios": "^1.15.0",
     "bcryptjs": "^3.0.3",
+    "dotenv": "^17.4.2",
     "framer-motion": "^12.38.0",
     "jimp": "^1.6.1",
     "mysql2": "^3.22.3",

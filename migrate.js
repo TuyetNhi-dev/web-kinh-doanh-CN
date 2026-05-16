@@ -1,3 +1,4 @@
+require('dotenv').config();
 const mysql = require('mysql2/promise');
 
 async function migrate() {
@@ -95,6 +96,14 @@ async function migrate() {
     console.log('✅ Added column: orders.payment_method');
   } catch (e) {
     if (e.code === 'ER_DUP_FIELDNAME') console.log('⏭️  Column orders.payment_method already exists');
+    else console.error('❌ Error:', e.message);
+  }
+
+  try {
+    await connection.execute(`ALTER TABLE orders ADD COLUMN payment_info JSON DEFAULT NULL`);
+    console.log('✅ Added column: orders.payment_info');
+  } catch (e) {
+    if (e.code === 'ER_DUP_FIELDNAME') console.log('⏭️  Column orders.payment_info already exists');
     else console.error('❌ Error:', e.message);
   }
 

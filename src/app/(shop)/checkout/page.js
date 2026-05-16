@@ -14,7 +14,7 @@ const checkoutSchema = z.object({
   fullName: z.string().min(2, "Vui lòng nhập họ tên"),
   phone: z.string().min(10, "Số điện thoại không hợp lệ"),
   address: z.string().min(5, "Vui lòng nhập địa chỉ giao hàng"),
-  paymentMethod: z.enum(["cod", "banking"]),
+  paymentMethod: z.enum(["cod", "banking", "momo", "vnpay"]),
 });
 
 export default function CheckoutPage() {
@@ -53,14 +53,41 @@ export default function CheckoutPage() {
 
     setLoading(true);
     try {
-      await axios.post("/api/orders", {
+      const response = await axios.post("/api/orders", {
         items: cart,
         shippingInfo: data,
         totalAmount: total,
       });
+      
+      const orderId = response.data.orderId;
+
+      if (data.paymentMethod === "momo") {
+        const momoRes = await axios.post("/api/payments/momo", {
+          orderId,
+          amount: total,
+          orderInfo: `Thanh toán đơn hàng #${orderId} tại HBN TechStore`,
+        });
+        if (momoRes.data.payUrl) {
+          window.location.href = momoRes.data.payUrl;
+          return;
+        }
+      }
+
+      if (data.paymentMethod === "vnpay") {
+        const vnpayRes = await axios.post("/api/payments/vnpay", {
+          orderId,
+          amount: total,
+          orderInfo: `Thanh toán đơn hàng #${orderId} tại HBN TechStore`,
+        });
+        if (vnpayRes.data.paymentUrl) {
+          window.location.href = vnpayRes.data.paymentUrl;
+          return;
+        }
+      }
+
       toast.success("Đặt hàng thành công!");
       clearCart();
-      router.push("/"); // Có thể tạo trang success riêng sau
+      router.push(`/order-success?orderId=${orderId}`);
     } catch (error) {
       toast.error(error.response?.data?.message || "Lỗi khi đặt hàng");
     } finally {
@@ -126,6 +153,28 @@ export default function CheckoutPage() {
                 <div>
                   <div style={{ fontWeight: 'bold' }}>Chuyển khoản ngân hàng</div>
                   <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Xác nhận nhanh trong 5 phút</div>
+                </div>
+             </label>
+
+             <label style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '15px', border: '1px solid var(--border-color)', borderRadius: '8px', cursor: 'pointer' }}>
+                <input type="radio" value="momo" {...register("paymentMethod")} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                  <img src="https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png" alt="MoMo" style={{ width: '30px', height: '30px', borderRadius: '6px' }} />
+                  <div>
+                    <div style={{ fontWeight: 'bold' }}>Ví MoMo (Sandbox)</div>
+                    <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Thanh toán qua ứng dụng MoMo</div>
+                  </div>
+                </div>
+             </label>
+
+             <label style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '15px', border: '1px solid var(--border-color)', borderRadius: '8px', cursor: 'pointer' }}>
+                <input type="radio" value="vnpay" {...register("paymentMethod")} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                  <img src="https://vnpay.vn/wp-content/uploads/2020/07/Logo-VNPAY.png" alt="VNPay" style={{ width: '60px', height: '24px', objectFit: 'contain' }} />
+                  <div>
+                    <div style={{ fontWeight: 'bold' }}>VNPay (MOCK)</div>
+                    <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Thanh toán qua cổng VNPay</div>
+                  </div>
                 </div>
              </label>
           </div>
