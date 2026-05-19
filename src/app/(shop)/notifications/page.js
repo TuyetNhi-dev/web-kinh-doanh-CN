@@ -3,11 +3,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { useNotificationStore } from "@/store/useNotificationStore";
 
 export default function NotificationsPage() {
   const { notifications, markAllAsRead, markAsRead } = useNotificationStore();
   const [activeTab, setActiveTab] = useState("Tất cả");
+
+  const router = useRouter();
 
   const filteredNotifications = activeTab === "Tất cả" 
     ? notifications 
@@ -17,8 +20,11 @@ export default function NotificationsPage() {
     markAllAsRead();
   };
 
-  const toggleRead = (id) => {
-    markAsRead(id);
+  const toggleRead = (note) => {
+    markAsRead(note.id);
+    if (note.type === "order" || note.category === "Đơn hàng") {
+      router.push("/orders");
+    }
   };
 
   return (
@@ -74,7 +80,7 @@ export default function NotificationsPage() {
             filteredNotifications.map((note) => (
               <div 
                 key={note.id}
-                onClick={() => toggleRead(note.id)}
+                onClick={() => toggleRead(note)}
                 style={{
                   padding: '25px',
                   borderBottom: '1px solid #f5f5f5',

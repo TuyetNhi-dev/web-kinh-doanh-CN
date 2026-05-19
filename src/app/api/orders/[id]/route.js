@@ -25,6 +25,16 @@ export async function GET(req, { params }) {
 
     const order = rows[0];
 
+    const [itemsRows] = await connection.execute(
+      `SELECT oi.*, p.name, p.image_url 
+       FROM order_items oi 
+       LEFT JOIN products p ON oi.product_id = p.id 
+       WHERE oi.order_id = ?`,
+      [id]
+    );
+    
+    order.items = itemsRows;
+
     // Kiểm tra quyền truy cập (chỉ người đặt hoặc admin mới xem được)
     // Giả sử session.user.email được dùng để xác thực
     if (order.customer_email !== session.user.email) {

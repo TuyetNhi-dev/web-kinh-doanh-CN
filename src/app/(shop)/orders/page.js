@@ -103,8 +103,13 @@ export default function OrderHistoryPage() {
                       <span><i className="fa-solid fa-location-dot" style={{ marginRight: "6px" }}></i>{order.shipping_address}</span>
                     )}
                   </div>
-                  <div style={{ fontWeight: 700, fontSize: "1.15rem" }}>
-                    Tổng: <span style={{ color: "var(--brand-orange)" }}>{new Intl.NumberFormat("vi-VN").format(order.total_amount)}đ</span>
+                  <div style={{ display: "flex", alignItems: "center", gap: "20px", flexWrap: "wrap" }}>
+                    <div style={{ fontWeight: 700, fontSize: "1.15rem" }}>
+                      Tổng: <span style={{ color: "var(--brand-orange)" }}>{new Intl.NumberFormat("vi-VN").format(order.total_amount)}đ</span>
+                    </div>
+                    <button onClick={() => router.push(`/orders/${order.id}`)} className="btn btn-outline" style={{ padding: "8px 15px", fontSize: "0.9rem" }}>
+                      Xem chi tiết
+                    </button>
                   </div>
                 </div>
               </div>

@@ -71,9 +71,14 @@ function OrderSuccessContent() {
         )}
 
         <div style={{ textAlign: 'left', background: 'rgba(255,255,255,0.05)', padding: '20px', borderRadius: '15px', marginBottom: '40px' }}>
+          <h3 style={{ marginBottom: '15px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '10px' }}>Thông tin đơn hàng</h3>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
             <span>Mã đơn hàng:</span>
             <span style={{ fontWeight: 'bold' }}>#{orderId}</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+            <span>Ngày đặt:</span>
+            <span>{order?.created_at ? new Date(order.created_at).toLocaleString('vi-VN') : ''}</span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
             <span>Phương thức thanh toán:</span>
@@ -85,9 +90,44 @@ function OrderSuccessContent() {
               {order?.status === 'paid' ? 'Đã thanh toán' : order?.status === 'pending' ? 'Chờ xử lý' : 'Thanh toán thất bại'}
             </span>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid var(--border-color)', paddingTop: '10px', marginTop: '10px' }}>
-            <span>Tổng tiền:</span>
-            <span style={{ fontWeight: 'bold', color: 'var(--accent-color)', fontSize: '1.2rem' }}>
+          
+          <h3 style={{ marginTop: '20px', marginBottom: '15px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '10px' }}>Thông tin giao hàng</h3>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+            <span>Người nhận:</span>
+            <span style={{ fontWeight: 'bold' }}>{order?.shipping_name || order?.customer_name}</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+            <span>Số điện thoại:</span>
+            <span>{order?.shipping_phone}</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+            <span>Địa chỉ:</span>
+            <span style={{ textAlign: 'right', maxWidth: '60%' }}>{order?.shipping_address}</span>
+          </div>
+
+          {order?.items && order.items.length > 0 && (
+            <>
+              <h3 style={{ marginTop: '20px', marginBottom: '15px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '10px' }}>Sản phẩm</h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '20px' }}>
+                {order.items.map(item => (
+                  <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <img src={item.image_url || '/placeholder.jpg'} alt={item.name || 'Sản phẩm'} style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '5px' }} />
+                      <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <span style={{ fontSize: '0.9rem', fontWeight: 'bold' }}>{item.name || `Sản phẩm #${item.product_id}`}</span>
+                        <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>SL: {item.quantity}</span>
+                      </div>
+                    </div>
+                    <span style={{ fontWeight: 'bold' }}>{new Intl.NumberFormat('vi-VN').format(item.price * item.quantity)}đ</span>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+
+          <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid var(--border-color)', paddingTop: '15px', marginTop: '10px' }}>
+            <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>Tổng tiền:</span>
+            <span style={{ fontWeight: 'bold', color: 'var(--accent-color)', fontSize: '1.4rem' }}>
               {new Intl.NumberFormat('vi-VN').format(order?.total_amount)}đ
             </span>
           </div>
@@ -97,7 +137,7 @@ function OrderSuccessContent() {
           <button onClick={() => router.push("/")} className="btn" style={{ flex: 1, padding: '15px', background: 'rgba(255,255,255,0.1)', border: '1px solid var(--border-color)' }}>
             Về trang chủ
           </button>
-          <button onClick={() => router.push("/profile?tab=orders")} className="btn btn-primary" style={{ flex: 1, padding: '15px' }}>
+          <button onClick={() => router.push("/orders")} className="btn btn-primary" style={{ flex: 1, padding: '15px' }}>
             Xem đơn hàng
           </button>
         </div>

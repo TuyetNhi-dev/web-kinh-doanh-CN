@@ -3,11 +3,13 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useNotificationStore } from "@/store/useNotificationStore";
 
 export default function NotificationDropdown({ isOpen, onClose }) {
   const { notifications, markAllAsRead, markAsRead } = useNotificationStore();
   const dropdownRef = useRef(null);
+  const router = useRouter();
 
   const unreadCount = notifications.filter(n => !n.isRead).length;
 
@@ -79,6 +81,10 @@ export default function NotificationDropdown({ isOpen, onClose }) {
                 className="notify-item"
                 onClick={() => {
                   markAsRead(note.id);
+                  if (note.type === 'order' || note.category === 'Đơn hàng') {
+                    router.push("/orders");
+                    onClose();
+                  }
                 }}
                 style={{
                   padding: '15px 20px',

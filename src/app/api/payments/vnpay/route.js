@@ -41,7 +41,7 @@ export async function GET(req) {
       </head>
       <body>
         <div class="card">
-          <img src="https://vnpay.vn/wp-content/uploads/2020/07/Logo-VNPAY.png" class="logo" />
+          <img src="https://stcd02206177151.cloud.edgevnpay.vn/assets/images/logo-icon/logo-primary.svg" class="logo" alt="VNPAY" onerror="this.style.display='none'" />
           <h2>Cổng thanh toán VNPay (MOCK)</h2>
           <p>Đơn hàng: <strong>#${orderId}</strong></p>
           <p>Số tiền: <strong>${new Intl.NumberFormat('vi-VN').format(amount)}đ</strong></p>

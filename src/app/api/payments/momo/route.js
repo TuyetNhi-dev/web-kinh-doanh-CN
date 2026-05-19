@@ -16,8 +16,19 @@ export async function POST(req) {
     const requestType = "captureWallet";
     const extraData = ""; // Có thể gửi base64 encoded data
 
-    const params = {
+    const rawSignature = `accessKey=${accessKey}&amount=${amount}&extraData=${extraData}&ipnUrl=${ipnUrl}&orderId=${orderId}&orderInfo=${orderInfo}&partnerCode=${partnerCode}&redirectUrl=${redirectUrl}&requestId=${requestId}&requestType=${requestType}`;
+    
+    // Tạo chữ ký (signature)
+    const crypto = require('crypto');
+    const signature = crypto
+      .createHmac("sha256", secretKey)
+      .update(rawSignature)
+      .digest("hex");
+
+    const requestBody = {
       partnerCode,
+      partnerName: "HBN TechStore",
+      storeId: "HBNStore",
       requestId,
       amount: amount.toString(),
       orderId: orderId.toString(),
@@ -26,13 +37,6 @@ export async function POST(req) {
       ipnUrl,
       extraData,
       requestType,
-    };
-
-    const signature = createMoMoSignature(params, secretKey);
-    
-    const requestBody = {
-      ...params,
-      accessKey,
       signature,
       lang: "vi",
     };
