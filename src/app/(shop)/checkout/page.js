@@ -10,6 +10,29 @@ import * as z from "zod";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
+function ImageWithFallback({ src, alt, width = 40, height = 40, fallbackText = "" }) {
+  const [failed, setFailed] = useState(false);
+  const w = typeof width === "number" ? `${width}px` : width;
+  const h = typeof height === "number" ? `${height}px` : height;
+  if (!src || failed) {
+    return (
+      <div style={{ width: w, height: h, display: "flex", alignItems: "center", justifyContent: "center", background: "#f3f3f3", color: "#333", borderRadius: 6, fontWeight: 700 }}>
+        {fallbackText}
+      </div>
+    );
+  }
+
+  return (
+    // plain img to avoid next/image optimization issues for external/local mix
+    <img
+      src={src}
+      alt={alt}
+      onError={() => setFailed(true)}
+      style={{ width: w, height: h, objectFit: "cover", borderRadius: 6 }}
+    />
+  );
+}
+
 const checkoutSchema = z.object({
   fullName: z.string().min(2, "Vui lòng nhập họ tên"),
   phone: z.string().min(10, "Số điện thoại không hợp lệ"),
@@ -159,7 +182,7 @@ export default function CheckoutPage() {
              <label style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '15px', border: '1px solid var(--border-color)', borderRadius: '8px', cursor: 'pointer' }}>
                 <input type="radio" value="momo" {...register("paymentMethod")} />
                 <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                  <img src="https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png" alt="MoMo" style={{ width: '30px', height: '30px', borderRadius: '6px' }} />
+                  <ImageWithFallback src="/images/momo.png" alt="MoMo" width={36} height={36} fallbackText="MoMo" />
                   <div>
                     <div style={{ fontWeight: 'bold' }}>Ví MoMo (Sandbox)</div>
                     <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Thanh toán qua ứng dụng MoMo</div>
@@ -170,7 +193,7 @@ export default function CheckoutPage() {
              <label style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '15px', border: '1px solid var(--border-color)', borderRadius: '8px', cursor: 'pointer' }}>
                 <input type="radio" value="vnpay" {...register("paymentMethod")} />
                 <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                  <img src="https://vnpay.vn/wp-content/uploads/2020/07/Logo-VNPAY.png" alt="VNPay" style={{ width: '60px', height: '24px', objectFit: 'contain' }} />
+                  <ImageWithFallback src="/images/vnpay.png" alt="VNPay" width={60} height={24} fallbackText="VN" />
                   <div>
                     <div style={{ fontWeight: 'bold' }}>VNPay (MOCK)</div>
                     <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Thanh toán qua cổng VNPay</div>

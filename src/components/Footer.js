@@ -6,32 +6,64 @@ import Link from "next/link";
 export default function Footer() {
   const [selectedMethod, setSelectedMethod] = useState(null);
 
+  // Keep keys aligned with checkout `paymentMethod` values: cod, banking, momo, vnpay
   const paymentMethods = [
+    {
+      key: "cod",
+      label: "Tiền mặt",
+      icon: "fa-money-bill-wave",
+      info: "Thanh toán khi nhân viên giao hàng đến tận nơi.",
+    },
+    {
+      key: "banking",
+      label: "Chuyển khoản",
+      icon: "fa-building-columns",
+      info: "Thanh toán trực tuyến qua ngân hàng an toàn và tiện lợi.",
+    },
+    {
+      key: "momo",
+      label: "Ví MoMo",
+      // try local asset first; fallback handled by PaymentIcon
+      icon: "/images/momo.png",
+      info: "Thanh toán qua ứng dụng MoMo (sandbox).",
+    },
+    {
+      key: "vnpay",
+      label: "VNPay",
+      icon: "/images/vnpay.png",
+      info: "Thanh toán qua cổng VNPay.",
+    },
     {
       key: "qr",
       label: "QR Code",
       icon: "fa-qrcode",
       info: "Quét mã QR để thanh toán nhanh bằng ví điện tử hoặc ngân hàng.",
     },
-    {
-      key: "cash",
-      label: "Tiền mặt",
-      icon: "fa-money-bill-wave",
-      info: "Thanh toán khi nhân viên giao hàng đến tận nơi.",
-    },
-    {
-      key: "installment",
-      label: "Trả góp",
-      icon: "fa-calendar-check",
-      info: "Trả góp linh hoạt với lãi suất ưu đãi và hồ sơ đơn giản.",
-    },
-    {
-      key: "banking",
-      label: "Internet Banking",
-      icon: "fa-building-columns",
-      info: "Thanh toán trực tuyến qua ngân hàng an toàn và tiện lợi.",
-    },
   ];
+
+  function PaymentIcon({ icon, label, size = 20 }) {
+    const [failed, setFailed] = useState(false);
+    const isImage = typeof icon === "string" && (icon.startsWith("/") || icon.startsWith("http"));
+    if (isImage && !failed) {
+      return (
+        <img
+          src={icon}
+          alt={label}
+          onError={() => setFailed(true)}
+          style={{ width: size, height: size, objectFit: "cover", borderRadius: 6 }}
+        />
+      );
+    }
+
+    if (isImage && failed) {
+      return (
+        <div style={{ width: size, height: size, display: "flex", alignItems: "center", justifyContent: "center", background: "#f3f3f3", color: "#333", borderRadius: 6, fontWeight: 700 }}>{label.slice(0,2).toUpperCase()}</div>
+      );
+    }
+
+    // font icon
+    return <i className={`fa-solid ${icon}`} style={{ fontSize: size, color: "#333" }}></i>;
+  }
 
   return (
     <footer className="footer">
@@ -68,7 +100,7 @@ export default function Footer() {
                       }}
                     >
                       <div className="payment-method-icon">
-                        <i className={`fa-solid ${method.icon}`} style={{ fontSize: "1.3rem", color: "#333" }}></i>
+                        <PaymentIcon icon={method.icon} label={method.label} size={20} />
                       </div>
                       <span className="payment-method-label">{method.label}</span>
                     </button>
