@@ -182,7 +182,7 @@ export default function CheckoutPage() {
              <label style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '15px', border: '1px solid var(--border-color)', borderRadius: '8px', cursor: 'pointer' }}>
                 <input type="radio" value="momo" {...register("paymentMethod")} />
                 <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                  <ImageWithFallback src="/images/momo.png" alt="MoMo" width={36} height={36} fallbackText="MoMo" />
+                  <ImageWithFallback src="/images/momo.svg" alt="MoMo" width={36} height={36} fallbackText="MoMo" />
                   <div>
                     <div style={{ fontWeight: 'bold' }}>Ví MoMo (Sandbox)</div>
                     <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Thanh toán qua ứng dụng MoMo</div>
@@ -193,7 +193,7 @@ export default function CheckoutPage() {
              <label style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '15px', border: '1px solid var(--border-color)', borderRadius: '8px', cursor: 'pointer' }}>
                 <input type="radio" value="vnpay" {...register("paymentMethod")} />
                 <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                  <ImageWithFallback src="/images/vnpay.png" alt="VNPay" width={60} height={24} fallbackText="VN" />
+                  <ImageWithFallback src="/images/vnpay.svg" alt="VNPay" width={60} height={24} fallbackText="VN" />
                   <div>
                     <div style={{ fontWeight: 'bold' }}>VNPay (MOCK)</div>
                     <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Thanh toán qua cổng VNPay</div>

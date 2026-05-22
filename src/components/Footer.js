@@ -24,13 +24,13 @@ export default function Footer() {
       key: "momo",
       label: "Ví MoMo",
       // try local asset first; fallback handled by PaymentIcon
-      icon: "/images/momo.png",
+      icon: "/images/momo.svg",
       info: "Thanh toán qua ứng dụng MoMo (sandbox).",
     },
     {
       key: "vnpay",
       label: "VNPay",
-      icon: "/images/vnpay.png",
+      icon: "/images/vnpay.svg",
       info: "Thanh toán qua cổng VNPay.",
     },
     {
