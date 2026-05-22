@@ -13,7 +13,7 @@ export async function GET(req) {
     const sort = searchParams.get('sort');
     const sale = searchParams.get('sale');
 
-    let query = 'SELECT * FROM products WHERE 1=1';
+    let query = 'SELECT id, name, price, image_url, description, discount_percent, is_flash_sale, category, stock_quantity FROM products WHERE 1=1';
     const params = [];
 
     if (category && category !== 'all') {

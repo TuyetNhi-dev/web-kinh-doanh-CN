@@ -27,28 +27,104 @@ export async function GET(req) {
 
   // Trả về HTML giả lập trang thanh toán VNPay
   const html = `
-    <html>
+    <!DOCTYPE html>
+    <html lang="vi">
       <head>
-        <title>VNPay Mock Payment Portal</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Thanh toán VNPay - TechStore</title>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
         <style>
-          body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f0f2f5; }
-          .card { background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center; max-width: 400px; }
-          .btn { padding: 12px 24px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin: 10px; }
-          .btn-success { background: #005baa; color: white; }
-          .btn-fail { background: #e74c3c; color: white; }
-          .logo { width: 150px; margin-bottom: 20px; }
+          * { box-sizing: border-box; margin: 0; padding: 0; }
+          body { 
+            font-family: 'Inter', sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            background: linear-gradient(135deg, #005baa 0%, #00a4e4 100%);
+            color: #333;
+          }
+          .glass-card { 
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 40px; 
+            border-radius: 24px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2); 
+            text-align: center; 
+            max-width: 420px;
+            width: 90%;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+          }
+          .logo { width: 160px; margin-bottom: 30px; }
+          h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 20px; color: #111; }
+          .order-details {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: left;
+            border: 1px solid #e2e8f0;
+          }
+          .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+          }
+          .detail-row:last-child { margin-bottom: 0; }
+          .detail-label { color: #64748b; font-weight: 500; }
+          .detail-value { color: #0f172a; font-weight: 700; }
+          .price { color: #005baa; font-size: 1.2rem; }
+          
+          .action-text { margin-bottom: 20px; font-weight: 500; color: #475569; }
+          
+          .btn-container { display: flex; gap: 15px; flex-direction: column; }
+          .btn { 
+            padding: 16px 24px; 
+            border: none; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            width: 100%;
+          }
+          .btn-success { 
+            background: linear-gradient(to right, #005baa, #0076cc); 
+            color: white; 
+            box-shadow: 0 4px 15px rgba(0, 91, 170, 0.3);
+          }
+          .btn-success:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 91, 170, 0.4); }
+          .btn-fail { 
+            background: #f1f5f9; 
+            color: #64748b; 
+          }
+          .btn-fail:hover { background: #e2e8f0; color: #0f172a; }
         </style>
       </head>
       <body>
-        <div class="card">
+        <div class="glass-card">
           <img src="https://stcd02206177151.cloud.edgevnpay.vn/assets/images/logo-icon/logo-primary.svg" class="logo" alt="VNPAY" onerror="this.style.display='none'" />
-          <h2>Cổng thanh toán VNPay (MOCK)</h2>
-          <p>Đơn hàng: <strong>#${orderId}</strong></p>
-          <p>Số tiền: <strong>${new Intl.NumberFormat('vi-VN').format(amount)}đ</strong></p>
-          <hr/>
-          <p>Bạn muốn kết quả thanh toán thế nào?</p>
-          <button class="btn btn-success" onclick="window.location.href='/api/payments/vnpay/callback?orderId=${orderId}&status=success'">Thành công</button>
-          <button class="btn btn-fail" onclick="window.location.href='/api/payments/vnpay/callback?orderId=${orderId}&status=fail'">Thất bại</button>
+          <h2>Cổng thanh toán VNPay</h2>
+          
+          <div class="order-details">
+            <div class="detail-row">
+              <span class="detail-label">Mã đơn hàng</span>
+              <span class="detail-value">#${orderId}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Số tiền thanh toán</span>
+              <span class="detail-value price">${new Intl.NumberFormat('vi-VN').format(amount)}đ</span>
+            </div>
+          </div>
+          
+          <p class="action-text">Giả lập kết quả thanh toán cho đơn hàng này</p>
+          
+          <div class="btn-container">
+            <button class="btn btn-success" onclick="window.location.href='/api/payments/vnpay/callback?orderId=${orderId}&status=success'">Xác nhận thanh toán thành công</button>
+            <button class="btn btn-fail" onclick="window.location.href='/api/payments/vnpay/callback?orderId=${orderId}&status=fail'">Hủy giao dịch</button>
+          </div>
         </div>
       </body>
     </html>

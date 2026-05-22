@@ -1,47 +1,34 @@
 import { NextResponse } from "next/server";
-import { verifyMoMoSignature } from "@/lib/momo";
 import { getConnection } from "@/lib/db";
 
-export async function POST(req) {
+export async function GET(req) {
   let connection;
   try {
-    const body = await req.json();
-    console.log("MoMo IPN Callback:", body);
-
-    const secretKey = process.env.MOMO_SECRET_KEY;
-    const isValid = verifyMoMoSignature(body, secretKey);
-
-    if (!isValid) {
-      return NextResponse.json({ message: "Invalid signature" }, { status: 400 });
-    }
-
-    const { orderId, resultCode, message } = body;
+    const { searchParams } = new URL(req.url);
+    const orderId = searchParams.get("orderId");
+    const status = searchParams.get("status");
 
     connection = await getConnection();
-    
-    // resultCode = 0 means success
-    if (resultCode === 0) {
+
+    const transId = "MOMO" + Date.now().toString().slice(-8);
+
+    if (status === "success") {
       await connection.execute(
-        "UPDATE orders SET status = 'paid', payment_info = ? WHERE id = ?",
-        [JSON.stringify(body), orderId]
+        "UPDATE orders SET status = 'processing', payment_info = ? WHERE id = ?",
+        [JSON.stringify({ method: "momo", status: "success", transId }), orderId]
       );
-      console.log(`Order ${orderId} marked as PAID via MoMo`);
+      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/order-success?orderId=${orderId}&momo=success&transId=${transId}`);
     } else {
       await connection.execute(
-        "UPDATE orders SET status = 'failed', payment_info = ? WHERE id = ?",
-        [JSON.stringify(body), orderId]
+        "UPDATE orders SET status = 'cancelled', payment_info = ? WHERE id = ?",
+        [JSON.stringify({ method: "momo", status: "failed", transId }), orderId]
       );
-      console.log(`Order ${orderId} marked as FAILED via MoMo: ${message}`);
+      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/order-success?orderId=${orderId}&momo=fail`);
     }
-
-    // MoMo yêu cầu return 204 No Content hoặc 200 OK
-    return new NextResponse(null, { status: 204 });
   } catch (error) {
-    console.error("MoMo Callback Error:", error);
+    console.error("MoMo Mock Callback Error:", error);
     return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
   } finally {
     if (connection) connection.release();
   }
 }
-
-// MoMo cũng có thể gọi GET redirectUrl, nhưng mình xử lý ở trang thành công phía client.

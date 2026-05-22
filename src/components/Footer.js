@@ -1,6 +1,37 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 
 export default function Footer() {
+  const [selectedMethod, setSelectedMethod] = useState(null);
+
+  const paymentMethods = [
+    {
+      key: "qr",
+      label: "QR Code",
+      icon: "fa-qrcode",
+      info: "Quét mã QR để thanh toán nhanh bằng ví điện tử hoặc ngân hàng.",
+    },
+    {
+      key: "cash",
+      label: "Tiền mặt",
+      icon: "fa-money-bill-wave",
+      info: "Thanh toán khi nhân viên giao hàng đến tận nơi.",
+    },
+    {
+      key: "installment",
+      label: "Trả góp",
+      icon: "fa-calendar-check",
+      info: "Trả góp linh hoạt với lãi suất ưu đãi và hồ sơ đơn giản.",
+    },
+    {
+      key: "banking",
+      label: "Internet Banking",
+      icon: "fa-building-columns",
+      info: "Thanh toán trực tuyến qua ngân hàng an toàn và tiện lợi.",
+    },
+  ];
 
   return (
     <footer className="footer">
@@ -22,22 +53,34 @@ export default function Footer() {
               <h3 style={{ fontSize: "0.9rem", fontWeight: "700", marginBottom: "12px", color: "#111", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                 Phương thức thanh toán
               </h3>
-              <div style={{ display: "flex", gap: "10px" }}>
-                <div style={{ background: "white", padding: "5px 10px", borderRadius: "6px", border: "1px solid #ddd", height: "35px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <img 
-                    src="https://haitrieu.com/wp-content/uploads/2021/11/Logo-VNPAY-QR-1.png" 
-                    alt="VNPAY" 
-                    style={{ height: "20px", objectFit: "contain" }}
-                    referrerPolicy="no-referrer"
-                  />
-                </div>
-                <div style={{ background: "white", padding: "5px 10px", borderRadius: "6px", border: "1px solid #ddd", height: "35px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <img 
-                    src="https://static.mservice.io/img/logo-momo.png" 
-                    alt="MoMo" 
-                    style={{ height: "20px", objectFit: "contain" }} 
-                  />
-                </div>
+              <div className="payment-method-list">
+                {paymentMethods.map(method => {
+                  const isSelected = selectedMethod === method.key;
+                  return (
+                    <button
+                      key={method.key}
+                      type="button"
+                      className={`payment-method-button ${isSelected ? "selected" : ""}`}
+                      onClick={() => setSelectedMethod(method.key)}
+                      style={{
+                        border: isSelected ? "2px solid #ff8c00" : "1px solid #e0e0e0",
+                        background: isSelected ? "rgba(255, 140, 0, 0.1)" : "white",
+                      }}
+                    >
+                      <div className="payment-method-icon">
+                        <i className={`fa-solid ${method.icon}`} style={{ fontSize: "1.3rem", color: "#333" }}></i>
+                      </div>
+                      <span className="payment-method-label">{method.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+              <div className="payment-method-info">
+                {selectedMethod ? (
+                  <p>{paymentMethods.find(method => method.key === selectedMethod)?.info}</p>
+                ) : (
+                  <p>Nhấn vào một phương thức để xem thông tin thanh toán.</p>
+                )}
               </div>
             </div>
           </div>
@@ -45,20 +88,20 @@ export default function Footer() {
           <div>
             <h3>Hỗ trợ khách hàng</h3>
             <ul>
-              <li><Link href="#">Hướng dẫn mua hàng</Link></li>
-              <li><Link href="#">Câu hỏi thường gặp (FAQ)</Link></li>
-              <li><Link href="#">Trung tâm bảo hành</Link></li>
-              <li><Link href="#">Tra cứu đơn hàng</Link></li>
+              <li><Link href="/info/huong-dan-mua-hang">Hướng dẫn mua hàng</Link></li>
+              <li><Link href="/info/faq">Câu hỏi thường gặp (FAQ)</Link></li>
+              <li><Link href="/info/trung-tam-bao-hanh">Trung tâm bảo hành</Link></li>
+              <li><Link href="/info/tra-cuu-don-hang">Tra cứu đơn hàng</Link></li>
             </ul>
           </div>
 
           <div>
             <h3>Chính sách</h3>
             <ul>
-              <li><Link href="#">Bảo mật thông tin</Link></li>
-              <li><Link href="#">Chính sách Đổi trả</Link></li>
-              <li><Link href="#">Chính sách Giao hàng</Link></li>
-              <li><Link href="#">Chính sách Bảo hành</Link></li>
+              <li><Link href="/info/bao-mat-thong-tin">Bảo mật thông tin</Link></li>
+              <li><Link href="/info/chinh-sach-doi-tra">Chính sách Đổi trả</Link></li>
+              <li><Link href="/info/chinh-sach-giao-hang">Chính sách Giao hàng</Link></li>
+              <li><Link href="/info/chinh-sach-bao-hanh">Chính sách Bảo hành</Link></li>
             </ul>
           </div>
 

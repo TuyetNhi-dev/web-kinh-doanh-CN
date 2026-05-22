@@ -10,16 +10,18 @@ export async function GET(req) {
 
     connection = await getConnection();
 
+    const transId = "VNP" + Date.now().toString().slice(-8);
+
     if (status === "success") {
       await connection.execute(
-        "UPDATE orders SET status = 'paid', payment_info = ? WHERE id = ?",
-        [JSON.stringify({ method: "vnpay", status: "success" }), orderId]
+        "UPDATE orders SET status = 'processing', payment_info = ? WHERE id = ?",
+        [JSON.stringify({ method: "vnpay", status: "success", transId }), orderId]
       );
-      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/order-success?orderId=${orderId}&vnpay=success`);
+      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/order-success?orderId=${orderId}&vnpay=success&transId=${transId}`);
     } else {
       await connection.execute(
-        "UPDATE orders SET status = 'failed', payment_info = ? WHERE id = ?",
-        [JSON.stringify({ method: "vnpay", status: "failed" }), orderId]
+        "UPDATE orders SET status = 'cancelled', payment_info = ? WHERE id = ?",
+        [JSON.stringify({ method: "vnpay", status: "failed", transId }), orderId]
       );
       return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/order-success?orderId=${orderId}&vnpay=fail`);
     }

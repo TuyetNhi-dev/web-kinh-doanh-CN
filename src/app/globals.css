@@ -33,7 +33,17 @@ body {
 /* Sidebar Categories & Mega Menu */
 .category-sidebar-wrapper {
   position: relative;
-  height: 100%;
+  height: auto;
+}
+
+.category-dropdown-panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: auto;
+  z-index: 1000;
+  overflow: hidden;
+  border-radius: 0 0 12px 12px;
 }
 
 .category-sidebar {
@@ -41,22 +51,23 @@ body {
   border: 1px solid var(--border-color);
   border-radius: 12px;
   overflow: hidden;
-  height: 100%;
+  height: auto;
   display: flex;
   flex-direction: column;
+  min-width: 220px;
 }
 
 .category-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 20px;
+  padding: 12px 16px;
   border-bottom: 1px solid #f8f9fa;
   font-size: 0.95rem;
   font-weight: 500;
   color: #333;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .category-item:last-child {
@@ -66,7 +77,6 @@ body {
 .category-item:hover, .category-item.active {
   background: var(--brand-orange-light);
   color: var(--brand-orange);
-  padding-left: 25px;
 }
 
 .category-item i {
@@ -77,6 +87,49 @@ body {
 }
 
 .category-item:hover i, .category-item.active i {
+  color: var(--brand-orange);
+}
+
+.category-details-panel {
+  position: relative;
+  width: 240px;
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  padding: 18px;
+  z-index: 1000;
+}
+
+.category-details-header {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+  color: #111;
+}
+
+.category-details-panel ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.category-details-panel ul li {
+  margin-bottom: 10px;
+}
+
+.category-details-panel ul li:last-child {
+  margin-bottom: 0;
+}
+
+.category-details-panel ul li a {
+  color: #555;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.category-details-panel ul li a:hover {
   color: var(--brand-orange);
 }
 
@@ -761,6 +814,12 @@ header {
   background: #fff;
 }
 
+.product-card-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
 .product-card-image img {
   max-width: 100%;
   max-height: 100%;
@@ -967,7 +1026,7 @@ header {
 /* Footer */
 .footer {
   margin-top: auto;
-  padding: 60px 0 20px;
+  padding: 40px 0 10px;
   background-color: #eaecf0;
   border-top: 1px solid #d1d5db;
   color: #333;
@@ -984,8 +1043,8 @@ header {
 .footer-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 40px;
-  margin-bottom: 40px;
+  gap: 24px;
+  margin-bottom: 24px;
 }
 
 .footer h3 {
@@ -1011,7 +1070,122 @@ header {
 
 /* Payment Methods Section - Now moved to column 1 */
 .payment-methods-sidebar {
-  margin-top: 20px;
+  margin-top: 12px;
+}
+
+.payment-method-list {
+  display: flex;
+  gap: 10px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  margin-bottom: 12px;
+}
+
+.payment-method-list::-webkit-scrollbar {
+  height: 5px;
+}
+
+.payment-method-list::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.16);
+  border-radius: 999px;
+}
+
+.payment-method-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 38px;
+  min-width: 38px;
+  padding: 1px;
+  border-radius: 10px;
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+}
+
+.payment-method-button:hover {
+  transform: translateY(-1px);
+  border-color: #ff8c00;
+}
+
+.payment-method-icon {
+  background: white;
+  width: 20px;
+  height: 20px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.payment-method-label {
+  font-size: 0.45rem;
+  color: #333;
+  text-align: center;
+  line-height: 1.1;
+}
+
+.payment-method-info {
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid #e0e0e0;
+}
+
+.payment-method-info p {
+  margin: 0;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.info-page {
+  min-height: calc(100vh - 140px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  background: #f5f6f8;
+}
+
+.info-card {
+  width: min(720px, 100%);
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+  padding: 42px 36px;
+}
+
+.info-card h1 {
+  margin: 0 0 18px;
+  font-size: 1.7rem;
+  color: #111;
+}
+
+.info-card p {
+  margin: 0 0 28px;
+  color: #3c3c3c;
+  line-height: 1.75;
+  font-size: 1rem;
+}
+
+.info-back-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  border-radius: 999px;
+  border: none;
+  background: #111;
+  color: white;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.info-back-button:hover {
+  background: #222;
 }
 
 /* Catalog Page Variables (Phong Vu inspired but TechStore aesthetic) */
@@ -1543,11 +1717,24 @@ header {
   position: absolute;
   top: 100%;
   left: 0;
-  width: 260px;
+  width: 220px;
   z-index: 1000;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   border-radius: 0 0 12px 12px;
   overflow: hidden;
+}
+
+.category-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f8f9fa;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .nav-admin-link {

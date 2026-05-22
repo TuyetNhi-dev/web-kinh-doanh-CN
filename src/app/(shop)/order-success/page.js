@@ -42,7 +42,8 @@ function OrderSuccessContent() {
     </div>
   );
 
-  const isSuccess = resultCode === "0" || vnpayStatus === "success" || (order && order.status === "paid") || (order && order.payment_method === "cod");
+  const momoStatus = searchParams.get("momo"); // Mock MoMo
+  const isSuccess = resultCode === "0" || vnpayStatus === "success" || momoStatus === "success" || (order && order.status === "processing") || (order && order.payment_method === "cod");
 
   return (
     <div className="container" style={{ padding: '80px 20px', textAlign: 'center', minHeight: '70vh' }}>
@@ -84,10 +85,16 @@ function OrderSuccessContent() {
             <span>Phương thức thanh toán:</span>
             <span style={{ textTransform: 'uppercase' }}>{order?.payment_method}</span>
           </div>
+          {order?.payment_info?.transId && (
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+              <span>Mã giao dịch:</span>
+              <span style={{ fontWeight: 'bold', color: 'var(--brand-orange)' }}>{order.payment_info.transId}</span>
+            </div>
+          )}
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
             <span>Trạng thái:</span>
             <span style={{ color: isSuccess ? '#4BB543' : 'var(--pv-red)', fontWeight: 'bold' }}>
-              {order?.status === 'paid' ? 'Đã thanh toán' : order?.status === 'pending' ? 'Chờ xử lý' : 'Thanh toán thất bại'}
+              {order?.status === 'processing' ? 'Đã thanh toán' : order?.status === 'pending' ? 'Chờ xử lý' : order?.status === 'completed' ? 'Hoàn thành' : order?.status === 'cancelled' ? 'Đã hủy' : 'Thanh toán thất bại'}
             </span>
           </div>
           

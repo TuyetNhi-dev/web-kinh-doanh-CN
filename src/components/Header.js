@@ -24,6 +24,7 @@ export default function Header() {
   const [isNotifyOpen, setIsNotifyOpen]     = useState(false);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showCategoryButton, setShowCategoryButton] = useState(false);
   const [searchQuery, setSearchQuery]       = useState("");
   const [searchResults, setSearchResults]   = useState([]);
   const [showResults, setShowResults]       = useState(false);
@@ -84,6 +85,20 @@ export default function Header() {
   }, []);
 
   useEffect(() => {
+    const handleScroll = () => {
+      const shouldShow = window.scrollY > 80;
+      setShowCategoryButton(shouldShow);
+      if (!shouldShow) {
+        setIsCategoryOpen(false);
+      }
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
     document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [isMobileMenuOpen]);
@@ -93,6 +108,8 @@ export default function Header() {
     const q = searchQuery.trim();
     router.push(q ? `/products?search=${encodeURIComponent(q)}` : "/products");
     setIsMobileMenuOpen(false);
+    setSearchQuery("");
+    setShowResults(false);
   };
 
   const closeMenu = () => setIsMobileMenuOpen(false);
@@ -135,7 +152,10 @@ export default function Header() {
                       key={product.id}
                       href={`/products/${product.id}`}
                       className="search-result-item"
-                      onClick={() => setShowResults(false)}
+                      onClick={() => {
+                        setShowResults(false);
+                        setSearchQuery("");
+                      }}
                     >
                       <div className="search-result-img">
                         {product.image_url ? (
@@ -158,7 +178,10 @@ export default function Header() {
                 <Link
                   href={`/products?search=${encodeURIComponent(searchQuery)}`}
                   className="search-view-all"
-                  onClick={() => setShowResults(false)}
+                  onClick={() => {
+                    setShowResults(false);
+                    setSearchQuery("");
+                  }}
                 >
                   Xem tất cả kết quả
                 </Link>
@@ -242,21 +265,23 @@ export default function Header() {
       {/* ── Bottom Bar ───────────────────────────── */}
       <div className="header-bottom">
         <div className="container">
-          <div
-            className="category-dropdown-wrapper"
-            onMouseEnter={() => setIsCategoryOpen(true)}
-            onMouseLeave={() => setIsCategoryOpen(false)}
-          >
-            <div className="category-btn">
-              <i className="fa-solid fa-bars"></i>
-              <span>Danh mục sản phẩm</span>
-            </div>
-            {isCategoryOpen && !isHomePage && (
-              <div className="category-dropdown-panel">
-                <CategorySidebar />
+          {showCategoryButton && (
+            <div
+              className="category-dropdown-wrapper"
+              onMouseEnter={() => setIsCategoryOpen(true)}
+              onMouseLeave={() => setIsCategoryOpen(false)}
+            >
+              <div className="category-btn">
+                <i className="fa-solid fa-bars"></i>
+                <span>Danh mục sản phẩm</span>
               </div>
-            )}
-          </div>
+              {isCategoryOpen && (
+                <div className="category-dropdown-panel">
+                  <CategorySidebar />
+                </div>
+              )}
+            </div>
+          )}
 
           <nav className="nav-links">
             <Link href="/products">Sản phẩm</Link>
