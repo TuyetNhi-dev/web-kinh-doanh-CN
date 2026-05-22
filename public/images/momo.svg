@@ -1,4 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
-  <rect width="120" height="120" rx="20" ry="20" fill="#1C7ED6"/>
-  <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="#fff" font-family="Arial, sans-serif" font-size="32">MoMo</text>
+  <rect width="120" height="120" rx="20" ry="20" fill="#AE2070"/>
+  <!-- mo mo text in white rounded rectangles -->
+  <rect x="8" y="8" width="48" height="48" rx="12" ry="12" fill="white"/>
+  <rect x="64" y="8" width="48" height="48" rx="12" ry="12" fill="white"/>
+  <rect x="8" y="64" width="48" height="48" rx="12" ry="12" fill="white"/>
+  <rect x="64" y="64" width="48" height="48" rx="12" ry="12" fill="white"/>
+  <text x="32" y="42" text-anchor="middle" fill="#AE2070" font-family="Arial Black, sans-serif" font-size="28" font-weight="900">mo</text>
+  <text x="88" y="42" text-anchor="middle" fill="#AE2070" font-family="Arial Black, sans-serif" font-size="28" font-weight="900">mo</text>
+  <text x="32" y="98" text-anchor="middle" fill="#AE2070" font-family="Arial Black, sans-serif" font-size="28" font-weight="900">mo</text>
+  <text x="88" y="98" text-anchor="middle" fill="#AE2070" font-family="Arial Black, sans-serif" font-size="28" font-weight="900">mo</text>
 </svg>

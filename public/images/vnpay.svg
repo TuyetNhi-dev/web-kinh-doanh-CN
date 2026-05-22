@@ -1,4 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
-  <rect width="120" height="120" rx="20" ry="20" fill="#19B5FE"/>
-  <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="#fff" font-family="Arial, sans-serif" font-size="30">VN</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 80">
+  <!-- VNPay official logo style: red/blue diamond shape + VNPAY text -->
+  <!-- Background transparent -->
+  
+  <!-- Diamond / rhombus shape (fingerprint icon area) -->
+  <g transform="translate(0,0)">
+    <!-- Red trapezoid top-left -->
+    <path d="M30 8 L70 8 L55 40 L15 40 Z" fill="#E31837"/>
+    <!-- Blue trapezoid top-right -->
+    <path d="M70 8 L95 8 L80 40 L55 40 Z" fill="#003087"/>
+    <!-- Red trapezoid bottom-left -->
+    <path d="M15 40 L55 40 L40 72 L5 72 Z" fill="#E31837"/>
+    <!-- Blue trapezoid bottom-right -->
+    <path d="M55 40 L80 40 L65 72 L40 72 Z" fill="#003087"/>
+    <!-- Fingerprint circle overlay white -->
+    <ellipse cx="50" cy="40" rx="14" ry="14" fill="white" opacity="0.15"/>
+    <ellipse cx="50" cy="40" rx="9" ry="9" fill="white" opacity="0.2"/>
+    <ellipse cx="50" cy="40" rx="4" ry="4" fill="white" opacity="0.3"/>
+  </g>
+  
+  <!-- VNPAY text -->
+  <text x="108" y="30" text-anchor="middle" fill="#003087" font-family="Arial Black, sans-serif" font-size="20" font-weight="900" letter-spacing="1">VN</text>
+  <text x="108" y="58" text-anchor="middle" fill="#E31837" font-family="Arial Black, sans-serif" font-size="20" font-weight="900" letter-spacing="1">PAY</text>
 </svg>

@@ -24,13 +24,13 @@ export default function Footer() {
       key: "momo",
       label: "Ví MoMo",
       // try local asset first; fallback handled by PaymentIcon
-      icon: "/images/momo.svg",
+      icon: "/images/momo.png",
       info: "Thanh toán qua ứng dụng MoMo (sandbox).",
     },
     {
       key: "vnpay",
       label: "VNPay",
-      icon: "/images/vnpay.svg",
+      icon: "/images/vnpay.png",
       info: "Thanh toán qua cổng VNPay.",
     },
     {
@@ -50,7 +50,7 @@ export default function Footer() {
           src={icon}
           alt={label}
           onError={() => setFailed(true)}
-          style={{ width: size, height: size, objectFit: "cover", borderRadius: 6 }}
+          style={{ width: "100%", height: "100%", objectFit: "contain", padding: "4px" }}
         />
       );
     }
