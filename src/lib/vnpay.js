@@ -10,7 +10,7 @@ import crypto from "crypto";
 const VNP_TMNCODE    = process.env.VNP_TMNCODE;
 const VNP_HASHSECRET = process.env.VNP_HASHSECRET;
 const VNP_URL        = process.env.VNP_URL        || "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-const VNP_RETURNURL  = process.env.VNP_RETURNURL  || "http://localhost:3000/api/vnpay_return";
+const VNP_RETURNURL  = process.env.VNP_RETURNURL  || `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/vnpay_return`;
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 

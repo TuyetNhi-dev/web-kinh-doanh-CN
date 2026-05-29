@@ -3,8 +3,21 @@ import { getConnection } from "@/lib/db";
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 import { sendEmail, buildResetPasswordEmail } from "@/lib/email";
+import { rateLimit, getClientIp } from "@/lib/rateLimiter";
 
 export async function POST(req) {
+  // Rate limit: 5 attempts per IP per 15 minutes
+  const { limited, retryAfter } = rateLimit(getClientIp(req), "forgot-password");
+  if (limited) {
+    return NextResponse.json(
+      { message: "Quá nhiều lần thử. Vui lòng thử lại sau." },
+      {
+        status: 429,
+        headers: { "Retry-After": String(retryAfter) },
+      }
+    );
+  }
+
   let connection;
   try {
     const { email } = await req.json();

@@ -128,6 +128,51 @@ async function migrate() {
     console.error('❌ Error creating notifications:', e.message);
   }
 
+  // 6. Create wishlists table
+  try {
+    await connection.execute(`
+      CREATE TABLE IF NOT EXISTS wishlists (
+        id         INT AUTO_INCREMENT PRIMARY KEY,
+        user_id    INT NOT NULL,
+        product_id INT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id)    REFERENCES users(id)    ON DELETE CASCADE,
+        FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
+        UNIQUE KEY unique_wishlist (user_id, product_id)
+      )
+    `);
+    console.log('✅ Created table: wishlists');
+  } catch (e) {
+    console.error('❌ Error creating wishlists:', e.message);
+  }
+
+  // 7. Create payments table
+  try {
+    await connection.execute(`
+      CREATE TABLE IF NOT EXISTS payments (
+        id             INT AUTO_INCREMENT PRIMARY KEY,
+        order_id       INT NOT NULL,
+        amount         DECIMAL(12,2) NOT NULL,
+        method         VARCHAR(20)  NOT NULL,
+        status         VARCHAR(20)  NOT NULL DEFAULT 'pending',
+        transaction_id VARCHAR(100) DEFAULT NULL,
+        bank_code      VARCHAR(50)  DEFAULT NULL,
+        pay_date       VARCHAR(20)  DEFAULT NULL,
+        response_code  VARCHAR(10)  DEFAULT NULL,
+        secure_hash    TEXT         DEFAULT NULL,
+        raw_data       JSON         DEFAULT NULL,
+        created_at     TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE KEY unique_order_method (order_id, method),
+        FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+        INDEX idx_order_id (order_id),
+        INDEX idx_status  (status)
+      )
+    `);
+    console.log('✅ Created table: payments');
+  } catch (e) {
+    console.error('❌ Error creating payments:', e.message);
+  }
+
   console.log('\n🎉 Migration completed!');
   await connection.end();
 }

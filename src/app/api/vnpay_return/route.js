@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { verifyReturnUrl, getResponseMessage } from "@/lib/vnpay";
 import { getConnection } from "@/lib/db";
+import { createNotification } from "@/lib/notifications";
+import { sendEmail, buildOrderConfirmEmail } from "@/lib/email";
 
 /**
  * GET /api/vnpay_return
@@ -54,7 +56,7 @@ export async function GET(req) {
 
     // Fetch order to validate amount (anti-tampering)
     const [orderRows] = await connection.execute(
-      "SELECT id, total_amount, status FROM orders WHERE id = ?",
+      "SELECT id, total_amount, status, user_id, customer_email, shipping_name FROM orders WHERE id = ?",
       [orderId]
     );
 
@@ -127,9 +129,35 @@ export async function GET(req) {
       ]
     );
 
+    // ── Step 6: Notification + email sau thanh toán thành công ───────────────
+    if (isSuccess) {
+      const { user_id: userId, customer_email: email, shipping_name: name } = order;
+      const totalFormatted = parseFloat(order.total_amount).toLocaleString("vi-VN");
+      if (userId) {
+        await createNotification(connection, {
+          userId,
+          type:    "order",
+          title:   `Đơn hàng #${orderId} đã được đặt thành công`,
+          content: `Tổng tiền: ${totalFormatted} đ. Thanh toán VNPay thành công. Chúng tôi sẽ sớm giao hàng.`,
+        });
+      }
+      if (email) {
+        const [itemRows] = await connection.execute(
+          `SELECT oi.quantity, oi.price, p.name FROM order_items oi
+           JOIN products p ON p.id = oi.product_id WHERE oi.order_id = ?`,
+          [orderId]
+        );
+        sendEmail({
+          to: email,
+          subject: `Xác nhận đơn hàng #${orderId} — HBN TechStore`,
+          html: buildOrderConfirmEmail({ orderId, customerName: name || "Khách hàng", totalAmount: order.total_amount, items: itemRows }),
+        }).catch(err => console.error("[VNPay] Lỗi gửi email:", err));
+      }
+    }
+
     await connection.commit();
 
-    // ── Step 6: Redirect user to result page ──────────────────────────────────
+    // ── Step 7: Redirect user to result page ──────────────────────────────────
     if (isSuccess) {
       return NextResponse.redirect(
         `${BASE_URL}/order-success?orderId=${orderId}&vnpay=success&transId=${result.transactionId}&bankCode=${result.bankCode}`

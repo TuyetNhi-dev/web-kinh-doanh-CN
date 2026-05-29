@@ -36,10 +36,12 @@ export async function GET(req, { params }) {
     order.items = itemsRows;
 
     // Kiểm tra quyền truy cập (chỉ người đặt hoặc admin mới xem được)
-    // Giả sử session.user.email được dùng để xác thực
-    if (order.customer_email !== session.user.email) {
-       // Kiểm tra xem có phải admin không (tuỳ logic của bạn)
-       // return NextResponse.json({ message: "Không có quyền xem đơn hàng này." }, { status: 403 });
+    const isAdmin = session.user.role === "admin";
+    if (!isAdmin && order.customer_email !== session.user.email) {
+      return NextResponse.json(
+        { message: "Không có quyền xem đơn hàng này." },
+        { status: 403 }
+      );
     }
 
     return NextResponse.json(order);

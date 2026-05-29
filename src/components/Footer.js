@@ -9,21 +9,8 @@ export default function Footer() {
   // Keep keys aligned with checkout `paymentMethod` values: cod, banking, momo, vnpay
   const paymentMethods = [
     {
-      key: "cod",
-      label: "Tiền mặt",
-      icon: "fa-money-bill-wave",
-      info: "Thanh toán khi nhân viên giao hàng đến tận nơi.",
-    },
-    {
-      key: "banking",
-      label: "Chuyển khoản",
-      icon: "fa-building-columns",
-      info: "Thanh toán trực tuyến qua ngân hàng an toàn và tiện lợi.",
-    },
-    {
       key: "momo",
       label: "Ví MoMo",
-      // try local asset first; fallback handled by PaymentIcon
       icon: "/images/momo.png",
       info: "Thanh toán qua ứng dụng MoMo (sandbox).",
     },
@@ -32,12 +19,6 @@ export default function Footer() {
       label: "VNPay",
       icon: "/images/vnpay.png",
       info: "Thanh toán qua cổng VNPay.",
-    },
-    {
-      key: "qr",
-      label: "QR Code",
-      icon: "fa-qrcode",
-      info: "Quét mã QR để thanh toán nhanh bằng ví điện tử hoặc ngân hàng.",
     },
   ];
 

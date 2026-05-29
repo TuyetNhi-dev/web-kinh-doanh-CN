@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic';
 import { getConnection } from "@/lib/db";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+import { rateLimit, getClientIp } from "@/lib/rateLimiter";
 
 async function insertUser(connection, email, hashedPassword, full_name) {
   try {
@@ -22,6 +23,18 @@ async function insertUser(connection, email, hashedPassword, full_name) {
 }
 
 export async function POST(req) {
+  // Rate limit: 5 registration attempts per IP per 15 minutes
+  const { limited, retryAfter } = rateLimit(getClientIp(req), "register");
+  if (limited) {
+    return NextResponse.json(
+      { message: "Quá nhiều lần thử. Vui lòng thử lại sau." },
+      {
+        status: 429,
+        headers: { "Retry-After": String(retryAfter) },
+      }
+    );
+  }
+
   let connection;
   try {
     const { email, password, full_name, username } = await req.json();

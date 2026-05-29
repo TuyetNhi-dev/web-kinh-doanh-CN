@@ -3,8 +3,11 @@
 import React, { useCallback } from 'react';
 import Image from 'next/image';
 import { useCartStore } from '@/store/useCartStore';
+import useWishlistStore from '@/store/useWishlistStore';
 import { toast } from 'react-hot-toast';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 const getOptimizedImageUrl = (url) => {
   if (!url) return url;
@@ -26,7 +29,39 @@ const getIcon = (name) => {
 };
 
 function ProductCard({ product }) {
-  const addToCart = useCartStore((state) => state.addToCart);
+  const addToCart       = useCartStore((state) => state.addToCart);
+  const isWishlisted    = useWishlistStore((s) => s.isWishlisted);
+  const toggleWishlist  = useWishlistStore((s) => s.toggleWishlist);
+  const fetchWishlist   = useWishlistStore((s) => s.fetchWishlist);
+  const { data: session } = useSession();
+  const router          = useRouter();
+
+  // Hydrate wishlist when first rendered (no-op if already hydrated)
+  React.useEffect(() => {
+    if (session) fetchWishlist();
+  }, [session, fetchWishlist]);
+
+  const handleWishlist = useCallback(
+    async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!session) {
+        router.push("/login?callbackUrl=/wishlist");
+        return;
+      }
+      const result = await toggleWishlist(product);
+      if (result?.needsLogin) {
+        router.push("/login?callbackUrl=/wishlist");
+        return;
+      }
+      const wished = isWishlisted(product.id);
+      toast(wished ? `Đã thêm vào yêu thích` : `Đã xoá khỏi yêu thích`, {
+        icon: wished ? "❤️" : "🤍",
+        style: { borderRadius: "10px", background: "#333", color: "#fff" },
+      });
+    },
+    [session, router, toggleWishlist, isWishlisted, product]
+  );
 
   const handleAddToCart = useCallback(
     (e) => {
@@ -58,6 +93,23 @@ function ProductCard({ product }) {
     <Link href={`/products/${product.id}`} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
       <div className="product-card glass">
         <div className="product-card-badge">Mới</div>
+
+        {/* Wishlist heart */}
+        <button
+          type="button"
+          onClick={handleWishlist}
+          aria-label={isWishlisted(product.id) ? "Xoá khỏi yêu thích" : "Thêm vào yêu thích"}
+          style={{
+            position: "absolute", top: "10px", right: "10px", zIndex: 2,
+            background: "rgba(255,255,255,0.85)", border: "none", borderRadius: "50%",
+            width: "34px", height: "34px", cursor: "pointer",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: "0.95rem", transition: "transform 0.15s",
+            color: isWishlisted(product.id) ? "#ef4444" : "#aaa",
+          }}
+        >
+          <i className={isWishlisted(product.id) ? "fa-solid fa-heart" : "fa-regular fa-heart"}></i>
+        </button>
 
         <div className="product-card-image">
           {imageUrl ? (

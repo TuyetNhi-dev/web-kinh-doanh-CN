@@ -36,7 +36,7 @@ const checkoutSchema = z.object({
   fullName: z.string().min(2, "Vui lòng nhập họ tên"),
   phone: z.string().min(10, "Số điện thoại không hợp lệ"),
   address: z.string().min(5, "Vui lòng nhập địa chỉ giao hàng"),
-  paymentMethod: z.enum(["cod", "banking", "momo", "vnpay"]),
+  paymentMethod: z.enum(["momo", "vnpay"]),
 });
 
 // ── Payment redirect overlay ──────────────────────────────────────────────────
@@ -102,7 +102,7 @@ export default function CheckoutPage() {
     resolver: zodResolver(checkoutSchema),
     defaultValues: {
       fullName: session?.user?.name || "",
-      paymentMethod: "cod",
+      paymentMethod: "momo",
     }
   });
 
@@ -228,26 +228,11 @@ export default function CheckoutPage() {
             <h2 style={{ fontSize: '1.5rem', margin: '40px 0 20px' }}>Phương thức thanh toán</h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                <label style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '15px', border: '1px solid var(--border-color)', borderRadius: '8px', cursor: 'pointer' }}>
-                  <input type="radio" value="cod" {...register("paymentMethod")} />
-                  <div>
-                    <div style={{ fontWeight: 'bold' }}>Thanh toán khi nhận hàng (COD)</div>
-                    <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Trả tiền mặt khi Shipper giao hàng</div>
-                  </div>
-               </label>
-               <label style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '15px', border: '1px solid var(--border-color)', borderRadius: '8px', cursor: 'pointer' }}>
-                  <input type="radio" value="banking" {...register("paymentMethod")} />
-                  <div>
-                    <div style={{ fontWeight: 'bold' }}>Chuyển khoản ngân hàng</div>
-                    <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Xác nhận nhanh trong 5 phút</div>
-                  </div>
-               </label>
-
-               <label style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '15px', border: '1px solid var(--border-color)', borderRadius: '8px', cursor: 'pointer' }}>
                   <input type="radio" value="momo" {...register("paymentMethod")} />
                   <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                     <ImageWithFallback src="/images/momo.png" alt="MoMo" width={48} height={48} fallbackText="MoMo" />
                     <div>
-                      <div style={{ fontWeight: 'bold' }}>Ví MoMo (Sandbox)</div>
+                      <div style={{ fontWeight: 'bold' }}>Ví MoMo</div>
                       <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Thanh toán qua ứng dụng MoMo</div>
                     </div>
                   </div>
@@ -258,7 +243,7 @@ export default function CheckoutPage() {
                   <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                     <ImageWithFallback src="/images/vnpay.png" alt="VNPay" width={80} height={40} fallbackText="VN" />
                     <div>
-                      <div style={{ fontWeight: 'bold' }}>VNPay Sandbox</div>
+                      <div style={{ fontWeight: 'bold' }}>VNPay</div>
                       <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Thanh toán qua cổng VNPay an toàn</div>
                     </div>
                   </div>

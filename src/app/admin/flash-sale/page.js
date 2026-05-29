@@ -46,7 +46,7 @@ export default function AdminFlashSale() {
             {products.map(p => (
               <tr key={p.id}>
                 <td style={{ fontWeight: '600' }}>{p.name}</td>
-                <td>{p.price.toLocaleString('vi-VN')} đ</td>
+                <td>{parseFloat(p.price || 0).toLocaleString('vi-VN')} đ</td>
                 <td>
                    <span style={{ 
                      color: p.is_flash_sale ? '#f57224' : '#888',

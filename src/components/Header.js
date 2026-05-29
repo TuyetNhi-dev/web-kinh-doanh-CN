@@ -19,6 +19,8 @@ export default function Header() {
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   const fetchNotifications = useNotificationStore((s) => s.fetchNotifications);
+  const connectSSE         = useNotificationStore((s) => s.connectSSE);
+  const disconnectSSE      = useNotificationStore((s) => s.disconnectSSE);
 
   const [mounted, setMounted]               = useState(false);
   const [isNotifyOpen, setIsNotifyOpen]     = useState(false);
@@ -67,10 +69,16 @@ export default function Header() {
     return () => window.removeEventListener("click", handleClick);
   }, []);
 
-  // Fetch thông báo từ API sau khi đăng nhập
+  // Fetch thông báo ban đầu + kết nối SSE realtime khi đăng nhập
   useEffect(() => {
-    if (session) fetchNotifications();
-  }, [session, fetchNotifications]);
+    if (session) {
+      fetchNotifications();
+      connectSSE();
+    } else {
+      disconnectSSE();
+    }
+    return () => disconnectSSE();
+  }, [session]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const onKey = (e) => {

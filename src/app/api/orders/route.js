@@ -74,8 +74,11 @@ export async function POST(req) {
       );
     }
 
-    // Tạo thông báo trong DB
-    if (userId) {
+    const paymentMethod = shippingInfo?.paymentMethod || "cod";
+    const isOnlinePayment = paymentMethod === "momo" || paymentMethod === "vnpay";
+
+    // Chỉ gửi notification ngay với COD — online payment chờ callback xác nhận
+    if (userId && !isOnlinePayment) {
       await createNotification(connection, {
         userId,
         type:    "order",
@@ -86,17 +89,19 @@ export async function POST(req) {
 
     await connection.commit();
 
-    // Gửi email xác nhận (không block response nếu lỗi)
-    sendEmail({
-      to:      session.user.email,
-      subject: `Xác nhận đơn hàng #${orderId} — HBN TechStore`,
-      html:    buildOrderConfirmEmail({
-        orderId,
-        customerName: shippingInfo?.fullName || session.user.name || "Khách hàng",
-        totalAmount,
-        items,
-      }),
-    }).catch((err) => console.error("Lỗi gửi email xác nhận đơn hàng:", err));
+    // Chỉ gửi email xác nhận với COD — online payment chờ callback
+    if (!isOnlinePayment) {
+      sendEmail({
+        to:      session.user.email,
+        subject: `Xác nhận đơn hàng #${orderId} — HBN TechStore`,
+        html:    buildOrderConfirmEmail({
+          orderId,
+          customerName: shippingInfo?.fullName || session.user.name || "Khách hàng",
+          totalAmount,
+          items,
+        }),
+      }).catch((err) => console.error("Lỗi gửi email xác nhận đơn hàng:", err));
+    }
 
     return NextResponse.json(
       { message: "Đặt hàng thành công!", orderId },

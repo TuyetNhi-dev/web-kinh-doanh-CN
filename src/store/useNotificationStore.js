@@ -18,15 +18,16 @@ function mapRow(row) {
     title:    row.title,
     content:  row.content,
     isRead:   Boolean(row.is_read),
-    time:     timeAgo(row.created_at),
+    time:     timeAgo(row.created_at || row.createdAt),
   };
 }
 
 export const useNotificationStore = create((set, get) => ({
   notifications: [],
   loading: false,
+  _eventSource: null,
 
-  // Fetch từ API — gọi khi user đăng nhập
+  // Fetch toàn bộ notification ban đầu
   fetchNotifications: async () => {
     if (get().loading) return;
     set({ loading: true });
@@ -40,6 +41,54 @@ export const useNotificationStore = create((set, get) => ({
     } finally {
       set({ loading: false });
     }
+  },
+
+  // Kết nối SSE để nhận notification realtime
+  connectSSE: () => {
+    // Đóng kết nối cũ nếu còn
+    const prev = get()._eventSource;
+    if (prev) prev.close();
+
+    const es = new EventSource("/api/notifications/stream");
+
+    es.addEventListener("notification", (e) => {
+      try {
+        const row = JSON.parse(e.data);
+        const newNotif = {
+          id:      row.id,
+          type:    row.type,
+          title:   row.title,
+          content: row.content,
+          isRead:  Boolean(row.isRead),
+          time:    timeAgo(row.createdAt),
+        };
+        set((state) => {
+          // Tránh duplicate
+          const exists = state.notifications.some((n) => n.id === newNotif.id);
+          if (exists) return state;
+          return { notifications: [newNotif, ...state.notifications] };
+        });
+      } catch {
+        // parse error — bỏ qua
+      }
+    });
+
+    es.onerror = () => {
+      // Reconnect tự động sau 5s nếu bị ngắt
+      es.close();
+      set({ _eventSource: null });
+      setTimeout(() => {
+        if (get()._eventSource === null) get().connectSSE();
+      }, 5000);
+    };
+
+    set({ _eventSource: es });
+  },
+
+  // Ngắt SSE (khi user logout)
+  disconnectSSE: () => {
+    const es = get()._eventSource;
+    if (es) { es.close(); set({ _eventSource: null }); }
   },
 
   // Đánh dấu 1 thông báo đã đọc

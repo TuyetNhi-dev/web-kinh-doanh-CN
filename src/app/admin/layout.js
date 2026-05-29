@@ -8,6 +8,7 @@ import "./admin.css";
 
 const NAV_ITEMS = [
   { name: "Dashboard",       icon: "fa-solid fa-chart-line",    path: "/admin" },
+  { name: "Doanh thu",       icon: "fa-solid fa-money-bill-trend-up", path: "/admin/revenue" },
   { name: "Sản phẩm",        icon: "fa-solid fa-box",           path: "/admin/products" },
   { name: "Quản lý Slider",  icon: "fa-solid fa-image",         path: "/admin/banners" },
   { name: "Flash Sale",      icon: "fa-solid fa-bolt",          path: "/admin/flash-sale" },

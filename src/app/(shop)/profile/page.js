@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import Link from "next/link";
 
 export default function ProfilePage() {
   const { data: session, status } = useSession();
@@ -14,6 +15,8 @@ export default function ProfilePage() {
   const [showPassword, setShowPassword] = useState(false);
   const [passwordData, setPasswordData] = useState({ currentPassword: "", newPassword: "", confirmPassword: "" });
   const [changingPassword, setChangingPassword] = useState(false);
+  const [orders, setOrders] = useState([]);
+  const [ordersLoading, setOrdersLoading] = useState(false);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -28,6 +31,15 @@ export default function ProfilePage() {
         })
         .catch(console.error)
         .finally(() => setLoading(false));
+
+      setOrdersLoading(true);
+      fetch("/api/orders/history")
+        .then((res) => res.json())
+        .then((data) => {
+          if (Array.isArray(data)) setOrders(data);
+        })
+        .catch(console.error)
+        .finally(() => setOrdersLoading(false));
     }
   }, [status, router]);
 
@@ -117,12 +129,32 @@ export default function ProfilePage() {
     fontWeight: 600,
   };
 
+  const statusLabel = {
+    pending:    { text: "Chờ xác nhận", color: "#f59e0b" },
+    processing: { text: "Đang xử lý",   color: "#3b82f6" },
+    completed:  { text: "Hoàn thành",   color: "#10b981" },
+    cancelled:  { text: "Đã hủy",       color: "#ef4444" },
+  };
+
   return (
     <div className="container" style={{ padding: "60px 20px", minHeight: "80vh", maxWidth: "800px" }}>
-      <h1 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: "40px" }}>
-        <i className="fa-solid fa-user-gear" style={{ marginRight: "12px", color: "var(--brand-orange)" }}></i>
-        Tài Khoản Của Tôi
-      </h1>
+      {/* Avatar + welcome */}
+      <div style={{ display: "flex", alignItems: "center", gap: "20px", marginBottom: "40px" }}>
+        <div style={{
+          width: 72, height: 72, borderRadius: "50%",
+          background: "linear-gradient(135deg, var(--brand-orange), #ff8c42)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontSize: "1.8rem", fontWeight: 800, color: "#fff", flexShrink: 0,
+        }}>
+          {(profile?.full_name || session?.user?.name || "?")[0].toUpperCase()}
+        </div>
+        <div>
+          <h1 style={{ fontSize: "1.8rem", fontWeight: 800, margin: 0 }}>
+            {profile?.full_name || session?.user?.name || "Tài khoản"}
+          </h1>
+          <p style={{ color: "var(--text-secondary)", margin: "4px 0 0" }}>{profile?.email}</p>
+        </div>
+      </div>
 
       {/* Profile Info */}
       <form onSubmit={handleSave} className="glass" style={{ padding: "35px", borderRadius: "20px", marginBottom: "30px" }}>
@@ -186,6 +218,73 @@ export default function ProfilePage() {
           {saving ? "Đang lưu..." : "Lưu Thay Đổi"}
         </button>
       </form>
+
+      {/* Order History */}
+      <div className="glass" style={{ padding: "35px", borderRadius: "20px", marginBottom: "30px" }}>
+        <h2 style={{ fontSize: "1.3rem", marginBottom: "25px", display: "flex", alignItems: "center", gap: "10px" }}>
+          <i className="fa-solid fa-clock-rotate-left" style={{ color: "var(--brand-orange)" }}></i>
+          Lịch sử đặt hàng
+        </h2>
+
+        {ordersLoading ? (
+          <p style={{ color: "var(--text-secondary)" }}>Đang tải đơn hàng...</p>
+        ) : orders.length === 0 ? (
+          <div style={{ textAlign: "center", padding: "30px 0", color: "var(--text-secondary)" }}>
+            <i className="fa-solid fa-box-open" style={{ fontSize: "2.5rem", opacity: 0.3, display: "block", marginBottom: "12px" }}></i>
+            <p>Bạn chưa có đơn hàng nào.</p>
+            <Link href="/products" style={{ color: "var(--brand-orange)", fontWeight: 600, marginTop: "10px", display: "inline-block" }}>
+              Mua sắm ngay →
+            </Link>
+          </div>
+        ) : (
+          <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+            {orders.map((order) => {
+              const s = statusLabel[order.status] || { text: order.status, color: "#888" };
+              return (
+                <Link
+                  key={order.id}
+                  href={`/orders/${order.id}`}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  <div style={{
+                    display: "flex", justifyContent: "space-between", alignItems: "center",
+                    padding: "16px 20px", borderRadius: "12px",
+                    border: "1px solid var(--border-color)",
+                    background: "var(--card-bg)",
+                    transition: "border-color 0.2s",
+                  }}
+                    onMouseEnter={(e) => e.currentTarget.style.borderColor = "var(--brand-orange)"}
+                    onMouseLeave={(e) => e.currentTarget.style.borderColor = "var(--border-color)"}
+                  >
+                    <div>
+                      <p style={{ fontWeight: 700, margin: 0 }}>Đơn hàng #{order.id}</p>
+                      <p style={{ color: "var(--text-secondary)", fontSize: "0.85rem", margin: "4px 0 0" }}>
+                        {new Date(order.created_at).toLocaleDateString("vi-VN", {
+                          day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit",
+                        })}
+                        {" · "}
+                        {order.items?.length || 0} sản phẩm
+                      </p>
+                    </div>
+                    <div style={{ textAlign: "right" }}>
+                      <p style={{ fontWeight: 700, margin: 0, color: "var(--brand-orange)" }}>
+                        {parseFloat(order.total_amount).toLocaleString("vi-VN")}đ
+                      </p>
+                      <span style={{
+                        display: "inline-block", marginTop: "4px",
+                        padding: "2px 10px", borderRadius: "20px", fontSize: "0.8rem", fontWeight: 600,
+                        background: s.color + "20", color: s.color,
+                      }}>
+                        {s.text}
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        )}
+      </div>
 
       {/* Change Password */}
       <div className="glass" style={{ padding: "35px", borderRadius: "20px" }}>
